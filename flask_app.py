@@ -225,5 +225,40 @@ def music_delete():
     # 사용자의 음악이 하나인 경우에 대비해 모든 음악을 확인할 수 있는 music.html로 이동합니다.
     return redirect(url_for('music'))
 
+# Playlist Page
+@app.route('/')
+def home():
+    playlist = Playlist.query.all()
+    return render_template('index.html', data=playlist)
+
+@app.route('/playlist/<id>')
+def mypage(id):
+    name = f"{id}의 Playlist"
+    playlist = Playlist.query.filter_by(id=id).all()
+    return render_template('index.html', data=name)
+
+# Playlist 생성하기
+@app.route('/playlist/create')
+def playlist_create():
+  #  데이터 입력받기
+    playlist_name_receive = request.args.get("playlist_name")
+    img_receive = request.args.get("img_url")
+  #  데이터 DB에 저장
+    my_playlist = Playlist(name=playlist_name_receive, img=img_receive)
+    db.session.add(my_playlist)
+    db.session.commit()
+    return render_template('index.html')
+
+# Playlist 삭제하기
+@app.route('/playlist/delete/<int:plid>', methods=['POST'])
+def playlist_delete(plid):
+    playlist = Playlist.query.get(plid)
+    if playlist:
+        db.session.delete(playlist)
+        db.session.commit()
+    return redirect(url_for('home'))
+
+# Playlist 수정하기
+
 if __name__ == "__main__":
     app.run(debug=True)
