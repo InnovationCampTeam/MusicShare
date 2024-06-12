@@ -1,8 +1,3 @@
-# 필수 라이브러리
-'''
-0. Flask : 웹서버를 시작할 수 있는 기능. app이라는 이름으로 플라스크를 시작한다
-1. render_template : html파일을 가져와서 보여준다
-'''
 from flask import Flask, render_template, request, redirect, url_for,session,jsonify
 app = Flask(__name__)
 # DB 기본 코드
@@ -45,10 +40,22 @@ class Music(db.Model):
     artist = db.Column(db.String(100), nullable=False)
     url = db.Column(db.String(100), nullable=False)
 
+class Share(db.Model):    
+    __tablename__ = 'Share'     
+    index = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    id = db.Column(db.String(30),ForeignKey('User.id'))
+    shareid = db.Column(db.String(30),ForeignKey('User.id'))
+
+
 
 with app.app_context():
     db.create_all()
 
+'''
+_________________________________________________________
+로그인 및 회원가입, 사용자 정보 관리를 위한 기능
+
+'''
 # 이승현 - index 페이지
 @app.route("/")
 def home():
@@ -117,6 +124,7 @@ def signup():
 # 이승현 - 로그아웃 기능 : 사용자 세션 제거
 @app.route("/logout/")
 def logout():
+    # 현재 저장된 세션 값을 비워준다.
     if "id" in session:
         session.pop('username', None)
         session.pop('id', None)
@@ -125,20 +133,26 @@ def logout():
 # 이승현 - 비밀번호 변경 : 사용자 비밀번호 변경
 @app.route("/changePassword/",methods=['POST'])
 def changePassword():
+    # 입력 값을 전달
     password = md5(request.form.get("password").encode('utf8')).hexdigest()
     newpassword = md5(request.form.get("newpassword").encode('utf8')).hexdigest()
     newpasswordCheck = md5(request.form.get("newpasswordCheck").encode('utf8')).hexdigest()   
-
+    
+    # 한 칸이라도 비어있을 경우
     if(newpassword == "" or password == "" or newpasswordCheck == "") :
         return jsonify(result = "fail",message="모든 칸에 입력을 넣어주세요.")     
     else:
         user = db.session.query(User).filter_by(id=session['id'],password=password).first()
+        # 비밀번호가 틀린 경우
         if(user != None) :
+            # 비밀번호 확인 값이 다른 경우
             if(request.form.get("newpassword") != request.form.get("newpasswordCheck")):
                 return jsonify(result = "fail",message="새 비밀번호가 일치하지 않습니다.")
             else:           
+                # 새 비밀번호가 정규식에 맞지 않는 경우
                 if re.match(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,20}$',request.form.get("newpassword")):
-                    user.password = newpassword
+                    # 비밀번호 변경 후 DB에 적용
+                    user.password = newpassword                    
                     db.session.commit()
                     return jsonify(result = "success",redirect='/playlist/'+session['id'])
                 else:
@@ -160,19 +174,19 @@ def changeName():
 # 이승현 - 회원 탈퇴 : 회원 정보 삭제
 @app.route("/withdraw/",methods=['POST'])
 def withdraw():    
-    user = db.session.query(User).filter_by(id=session['id']).first()# 해당 객체에 해당하는 delete 명령어를 통해 삭제 쿼리를 적용합니다.
+    user = db.session.query(User).filter_by(id=session['id']).first()
+    # 해당 객체에 해당하는 delete 명령어를 통해 삭제 쿼리를 적용합니다.
     db.session.delete(user)
     db.session.commit()
     session.pop('username', None)
     session.pop('id', None)
-
     return jsonify(result = "success",redirect='/')
 
 
 
 @app.route("/playlist/<id>/")
 def playlist(id):
-    playlists = Playlist.query.filter_by(plid=id).all()    
+    playlists = Playlist.query.filter_by(id=id).all()    
     return render_template('playlists.html', playlists=playlists)
 
 @app.route("/playlist/")
