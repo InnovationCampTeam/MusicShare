@@ -38,6 +38,7 @@ class Music(db.Model):
     plid = db.Column(db.Integer,ForeignKey('Playlist.plid'))
     title = db.Column(db.String(100), nullable=False)
     artist = db.Column(db.String(100), nullable=False)
+    
     url = db.Column(db.String(100), nullable=False)
 
 class Share(db.Model):    
@@ -54,7 +55,6 @@ with app.app_context():
 '''
 _________________________________________________________
 로그인 및 회원가입, 사용자 정보 관리를 위한 기능
-
 '''
 # 이승현 - index 페이지
 @app.route("/")
