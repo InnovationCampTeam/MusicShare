@@ -57,7 +57,7 @@ def home():
     else :        
         return render_template('index.html')
 
-# 이승현 - login 기능 : 사용자 입력을 받아 로그인 과정을 진행합니다.
+# 이승현 - 로그인 기능 : 사용자 입력을 받아 로그인 과정을 진행합니다.
 @app.route("/login/",methods=['POST'])
 def login():
     #form에서 보낸 데이터 받아오기
@@ -80,7 +80,7 @@ def login():
         # 로그인 정보가 올바르지 않음 전달
         return jsonify(result = "fail",message="회원 정보가 일치하지 않습니다.")
     
-
+# 이승현 - 회원가입 기능 : 사용자 정보를 받아 회원가입 과정을 진행합니다.
 @app.route("/signup/",methods=['POST'])
 def signup():
     #form에서 보낸 데이터 받아오기
@@ -114,13 +114,60 @@ def signup():
             # 아이디 정규식이 맞지 않을 경우
             return jsonify(result = "fail",message="적절하지 않은 아이디입니다.")
 
+# 이승현 - 로그아웃 기능 : 사용자 세션 제거
 @app.route("/logout/")
 def logout():
     if "id" in session:
         session.pop('username', None)
         session.pop('id', None)
-
     return redirect(url_for('home'))
+
+# 이승현 - 비밀번호 변경 : 사용자 비밀번호 변경
+@app.route("/changePassword/",methods=['POST'])
+def changePassword():
+    password = md5(request.form.get("password").encode('utf8')).hexdigest()
+    newpassword = md5(request.form.get("newpassword").encode('utf8')).hexdigest()
+    newpasswordCheck = md5(request.form.get("newpasswordCheck").encode('utf8')).hexdigest()   
+
+    if(newpassword == "" or password == "" or newpasswordCheck == "") :
+        return jsonify(result = "fail",message="모든 칸에 입력을 넣어주세요.")     
+    else:
+        user = db.session.query(User).filter_by(id=session['id'],password=password).first()
+        if(user != None) :
+            if(request.form.get("newpassword") != request.form.get("newpasswordCheck")):
+                return jsonify(result = "fail",message="새 비밀번호가 일치하지 않습니다.")
+            else:           
+                if re.match(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,20}$',request.form.get("newpassword")):
+                    user.password = newpassword
+                    db.session.commit()
+                    return jsonify(result = "success",redirect='/playlist/'+session['id'])
+                else:
+                    return jsonify(result = "fail",message="적절하지 않은 비밀번호입니다.")    
+        else :
+            return jsonify(result = "fail",message="비밀번호가 일치하지 않습니다.")
+
+
+# 이승현 - 이름 변경 : 사용자 이름 변경
+@app.route("/changeName/",methods=['POST'])
+def changeName():
+    newname = request.form.get("newname")
+    user = db.session.query(User).filter_by(id=session['id']).first()
+    user.username = newname
+    db.session.commit()
+    session['username'] = newname
+    return jsonify(result = "success",redirect='/playlist/'+session['id'])
+
+# 이승현 - 회원 탈퇴 : 회원 정보 삭제
+@app.route("/withdraw/",methods=['POST'])
+def withdraw():    
+    user = db.session.query(User).filter_by(id=session['id']).first()# 해당 객체에 해당하는 delete 명령어를 통해 삭제 쿼리를 적용합니다.
+    db.session.delete(user)
+    db.session.commit()
+    session.pop('username', None)
+    session.pop('id', None)
+
+    return jsonify(result = "success",redirect='/')
+
 
 
 @app.route("/playlist/<id>/")

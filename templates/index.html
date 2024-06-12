@@ -14,12 +14,12 @@
   <body>
     <form method="POST" id="loginForm">
       <div class="mb-3">
-        <label for="exampleInputID" class="form-label">ID</label>
-        <input type="text" class="form-control" id="exampleInputID" aria-describedby="ud" name="id">
+        <label for="LoginID" class="form-label">ID</label>
+        <input type="text" class="form-control" id="LoginID" aria-describedby="ud" name="id">
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword" class="form-label">PASSWORD</label>
-        <input type="text" class="form-control" id="exampleInputPassword" name="password">
+        <label for="LoginPassword" class="form-label">PASSWORD</label>
+        <input type="password" class="form-control" id="LoginPassword" name="password">
       </div>
     </form>
     <button class="btn btn-danger" onclick="login()">Login</button>
@@ -36,18 +36,18 @@
           <div class="modal-body">
             <form method="POST" id="signupForm">
               <div class="mb-3">
-                <label for="exampleInputID" class="form-label">ID</label>
-                <input type="text" class="form-control" id="exampleInputID" aria-describedby="exampleInputID" name="id">
-                <div id="exampleInputID" class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 8-14자</div>
+                <label for="SignupID" class="form-label">ID</label>
+                <input type="text" class="form-control" id="SignupID" name="id">
+                <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 8-14자</div>
               </div>
               <div class="mb-3">
-                <label for="exampleInputPassword" class="form-label">Password</label>
-                <input type="text" class="form-control" id="exampleInputPassword" name="password">
-                <div id="exampleInputID" class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 최소 한개의 특수 문자 + 10-20자</div>
+                <label for="SignupPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="SignupPassword" name="password">
+                <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 최소 한개의 특수 문자 + 10-20자</div>
               </div>
               <div class="mb-3">
-                <label for="exampleInputName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="exampleInputName" name="name">
+                <label for="SignupName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="SignupName" name="name">
               </div>
             </form>
             <button class="btn btn-danger" onclick="signup()">SignUp</button>

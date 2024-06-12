@@ -18,10 +18,13 @@
       {% for playlist in playlists %}{% endfor %}
     </div>
 
-    <!-- 로그아웃 기능을 가진 버튼 -->
+    <!-- 이승현 : 로그아웃 기능을 가진 버튼 -->
     <button type="button" class="btn btn-danger" onclick="location.href='/logout'">로그아웃</button>
+
+    <!-- 이승현 : 회원 정보 수정을 위한 모달 호출 버튼 -->
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#updateModal">회원 정보 수정</button>
-    <!-- Modal -->
+
+    <!-- 이승현 : 회원 정보 수정 모달 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -30,28 +33,128 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form method="POST" id="signupForm">
-              <div class="mb-3">
-                <label for="exampleInputID" class="form-label">ID</label>
-                <input type="text" class="form-control" id="exampleInputID" aria-describedby="exampleInputID" name="id">
-                <div id="exampleInputID" class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 8-14자</div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword" class="form-label">Password</label>
-                <input type="text" class="form-control" id="exampleInputPassword" name="password">
-                <div id="exampleInputID" class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 최소 한개의 특수 문자 + 10-20자</div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="exampleInputName" name="name">
-              </div>
+            <ul class="nav nav-tabs justify-content-center">
+              <li class="nav-item">
+                <a id="userNav" class="nav-link" onclick="changePassword()">비밀번호 변경</a>
+              </li>
+              <li class="nav-item">
+                <a id="userNav" class="nav-link" onclick="changeName()">이름 변경</a>
+              </li>
+              <li class="nav-item">
+                <a id="userNav" class="nav-link" onclick="withdraw()">회원 탈퇴</a>
+              </li>
+            </ul>
+
+            <form method="POST" id="userModal">
             </form>
-            <button type="button" class="btn btn-danger" onclick="signup()">SignUp</button>
+            <button id="userButton" type="button" class="btn btn-danger" onclick="signup()">SignUp</button>
           </div>
         </div>
       </div>
     </div>
 
+    <script type="text/javascript">
+      modal = $("#userModal");
+      button = $("#userButton");
+
+      function inputHTML(id, type, name, text) {
+        return '<div class="mb-3"><label for="' + id + '" class="form-label">' + text + '</label>' + '<input type="' + type + '" class="form-control" id="' + id + '" aria-describedby="' + id + '" name="' + name + '">'
+      }
+
+      function changePassword() {
+        console.log("changePassword!!")
+        modal.fadeOut(200, function () {
+          modal.empty();
+          modal.innerHTML = "";
+          modal.append(inputHTML("exampleInputPassword", "password", "password", "현재 Password"));
+          modal.append(inputHTML("exampleInputNewPassword", "password", "newpassword", "새로운 Password"));
+          modal.append(inputHTML("exampleInputNewPasswordCheck", "password", "newpasswordCheck", "새로운 Password 확인"));
+          modal.fadeIn(200);
+        });
+        button.attr("onclick", "changePassword_Post()");
+      }
+
+      function changeName() {
+        console.log("changeName!!")
+        modal.fadeOut(200, function () {
+          modal.empty();
+          modal.innerHTML = "";
+          modal.append(inputHTML("exampleInputNewName", "newname", "newname", "새로운 이름"));
+          modal.fadeIn(200);
+        });
+        button.attr("onclick", "changeName_Post()");
+      }
+
+      function withdraw() {
+        console.log("withdraw!!")
+        modal.fadeOut(200, function () {
+          modal.empty();
+          modal.innerHTML = "";
+          modal.fadeIn(200);
+        });
+        button.attr("onclick", "withdraw_Post()");
+      }
+
+      function changePassword_Post() {
+        $.ajax({
+          url: {{url_for('changePassword')}}, // 요기에
+          type: 'POST',
+          data: $("#userModal").serialize(),
+          dataType: 'JSON',
+          success: function (data) {
+            if (data.result == "success") {
+              window.location.href = data.redirect;
+            } else {
+              alert(data.message);
+            }
+          },
+          error: function (xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
+      }
+
+      function changeName_Post() {
+        $.ajax({
+          url: {{url_for('changeName')}}, // 요기에
+          type: 'POST',
+          data: $("#userModal").serialize(),
+          dataType: 'JSON',
+          success: function (data) {
+            if (data.result == "success") {
+              window.location.href = data.redirect;
+            } else {
+              alert(data.message);
+            }
+          },
+          error: function (xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
+      }
+
+      function withdraw_Post() {
+        $.ajax({
+          url: {{url_for('withdraw')}}, // 요기에
+          type: 'POST',
+          data: $("#userModal").serialize(),
+          dataType: 'JSON',
+          success: function (data) {
+            if (data.result == "success") {
+              window.location.href = data.redirect;
+            } else {
+              alert(data.message);
+            }
+          },
+          error: function (xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
+      }
+
+
+      changePassword();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
   </body>
