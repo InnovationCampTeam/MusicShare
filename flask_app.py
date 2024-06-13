@@ -81,7 +81,7 @@ def login():
         session['id'] = id
         session['username'] = user.username
         # 플레이리스트 페이지로 이동 명령 전달
-        return jsonify(result = "success",redirect='/playlist')
+        return jsonify(result = "success",redirect='/playlists')
     else :
         # 로그인 정보가 올바르지 않음 전달
         return jsonify(result = "fail",message="회원 정보가 일치하지 않습니다.")
@@ -153,7 +153,7 @@ def changePassword():
                     # 비밀번호 변경 후 DB에 적용
                     user.password = newpassword                    
                     db.session.commit()
-                    return jsonify(result = "success",redirect='/playlist/'+session['id'])
+                    return jsonify(result = "success",redirect='/playlists/'+session['id'])
                 else:
                     return jsonify(result = "fail",message="적절하지 않은 비밀번호입니다.")    
         else :
@@ -167,7 +167,7 @@ def changeName():
     user.username = newname
     db.session.commit()
     session['username'] = newname
-    return jsonify(result = "success",redirect='/playlist/'+session['id'])
+    return jsonify(result = "success",redirect='/playlists/'+session['id'])
 
 # 이승현 - 회원 탈퇴 : 회원 정보 삭제
 @app.route("/withdraw/",methods=['POST'])
