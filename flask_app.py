@@ -8,7 +8,7 @@ from hashlib import md5
 import re
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 app.config['SQLALCHEMY_DATABASE_URI'] =\
         'sqlite:///' + os.path.join(basedir, 'database.db')
 
@@ -215,10 +215,15 @@ def searchUser():
 
 # 이승현 - 친구의 플레이리스트 불러오기
 @app.route("/friends/playlist/<id>")
-def friendplaylist(id):        
+def friendPlaylist(id):
     if isFriend(id):
+        addURL = url_for('addFriend')
+        searchURL = url_for('searchUser')
+        loadURL = url_for('loadFriend')
+        deleteURL = url_for('deleteFriend')
+        friend = db.session.query(User).filter_by(id=id).first()
         playlists = User.query.filter_by(id=id).all()    
-        return render_template('friends_playlists.html',playlists=playlists)
+        return render_template('friends_playlists.html',friend=friend,playlists=playlists,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
     else :
         # 친구 관계 아님
         return  redirect(url_for('friends'))
@@ -227,7 +232,6 @@ def friendplaylist(id):
 @app.route("/friends/add/",methods=["GET"])
 def addFriend(): 
     id = request.args.get("id") 
-
     if(isFriend(id)) :
         return jsonify(result = "fail",message="이미 공유가 되어있습니다.") 
     else :        
