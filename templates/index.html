@@ -1,32 +1,41 @@
-<!--
-작성자 : 이승현
-작성일자 : 2024/06/13
-작성목적 : 이노베이션 캠프 2024 미니 웹 프로젝트 과정 / 로그인 및 회원가입 기능을 포함하고 있는 웹 페이지
--->
+<!-- 작성자 : 이승현 작성일자 : 2024/06/13 작성목적 : 이노베이션 캠프 2024 미니 웹 프로젝트 과정 / 로그인 및 회원가입 기능을 포함하고 있는 웹 페이지 -->
 
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Music Share</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- 각종 아이콘에 대한 설정 -->
+    <link rel="apple-touch-icon" href="/static/img/music-note-64.png" sizes="180x180">
+    <link rel="icon" href="/static/img/music-note-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/static/img/music-note-16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="https://getbootstrap.kr/docs/5.3/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/static/img/music-note-64.png" color="#712cf9">
+    <link rel="icon" href="/static/img/music-note-64.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   </head>
 
-  <body  style="width:100vw; height:100vh; display:flex;">    
-    <div style="margin: auto; width:40vw; height:auto; display: flex; flex-direction:column; align-items: center; margin-top: 20vh">
+  <body style="width:100vw; height:100vh;">
+    <div style="position: absolute;width:100%; height:100%;">
+      <img src='static/img/background.gif' style='width:100%; height:100%; object-fit: cover;'/>
+    </div>
+    <div style="position: absolute;top:50%;left:50%;transform:translate(-50%, -50%);height: auto; display: flex; justify-content: center; align-items: center;flex-direction:column">
       <!-- 로고 : 이미지 -->
+       <!--
       <img src="https://ichef.bbci.co.uk/news/1024/cpsprodpb/14A2C/production/_111042548_gettyimages-1010220858.jpg" style="width:300px; height:200px; object-fit: contain;">
+      -->
       <!-- 로고 : 메시지 -->
-      <p style="font-size: 20px; width:auto;">나만의 플레이리스트를 가까운 사람들과 공유해 보세요</p>
+      <p style="font-size: 35px;font-weight:1000; width:auto; color:white; text-align:center;">나만의 플레이리스트를<br>가까운 사람들과 공유해 보세요</p>
 
       <!-- 아이디 비밀번호 입력 구간 -->
-      <div style="width:20vw;">
-        <form method="POST" id="loginForm" >
+      <div style="width:25vw;">
+        <form method="POST" id="loginForm">
           <div class="mb-3">
             <input type="text" class="form-control" id="LoginID" aria-describedby="ud" name="id">
           </div>
@@ -36,107 +45,106 @@
         </form>
         <button class="btn btn-danger" onclick="login()" style="width: 100%;">Login</button>
         <div class="row" style="width:auto; text-align: center;">
-          <p class="col-7 m-0"style="font-size: 13px;">아직 회원이 아니신가요?</p>
-          <a class="col-5" type="button" data-bs-toggle="modal" data-bs-target="#Modal" style="color: blue; font-size: 13px;">회원가입하러가기</a>
-        </div>  
-      </div>
-       
-    </div>
-
-    <!-- 회원가입 모달 -->
-    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <form method="POST" id="signupForm">
-              <div class="mb-3">
-                <label for="SignupID" class="form-label">ID</label>
-                <input type="text" class="form-control" id="SignupID" name="id">
-                <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 8-14자</div>
-              </div>
-              <div class="mb-3">
-                <label for="SignupPassword" class="form-label">Password</label>
-                <input type="password" class="form-control" id="SignupPassword" name="password">
-                <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 최소 한개의 특수 문자 + 10-20자</div>
-              </div>
-              <div class="mb-3">
-                <label for="SignupName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="SignupName" name="name">
-              </div>
-            </form>
-            <button class="btn btn-danger" onclick="signup()">SignUp</button>
-          </div>
+          <p class="col m-0 p-1" style="font-size: 13px; font-weight:700; color:white; text-align:right;">아직 회원이 아니신가요?</p>
+          <a class="col m-0 p-1" type="button" data-bs-toggle="modal" data-bs-target="#Modal" style="color: blue; font-size: 13px; font-weight:700; color:blue; text-align:left;">회원가입하러가기</a>
         </div>
       </div>
     </div>
 
-    <!-- 사용자 검색 및 친구 추가 모달-->
-    <div class="modal fade" id="addFriendModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
+  </div>
+
+  <!-- 회원가입 모달 -->
+  <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="signupForm">
             <div class="mb-3">
-              <input type="text" class="form-control" id="saerchInput" name="id" placeholder="ID">
-              <button class="btn btn-danger" onclick="search()">Search</button>
+              <label for="SignupID" class="form-label">ID</label>
+              <input type="text" class="form-control" id="SignupID" name="id">
+              <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 8-14자</div>
             </div>
-            <div id="result">
+            <div class="mb-3">
+              <label for="SignupPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="SignupPassword" name="password">
+              <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 최소 한개의 특수 문자 + 10-20자</div>
             </div>
-          </div>
+            <div class="mb-3">
+              <label for="SignupName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="SignupName" name="name">
+            </div>
+          </form>
+          <button class="btn btn-danger" onclick="signup()">SignUp</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script>
-      // 로그인 값을 받아 전달하는 기능
-      function login() {
-        $.ajax({
-          url: {{url_for('login')}}, // 요기에
-          type: 'POST',
-          data: $("#loginForm").serialize(),
-          dataType: 'JSON',
-          success: function (data) {
-            if (data.result == "success") {
-              window.location.href = data.redirect;
-            } else {
-              alert(data.message);
-            }
-          },
-          error: function (xhr, status) {
-            alert(xhr + " : " + status);
+  <!-- 사용자 검색 및 친구 추가 모달-->
+  <div class="modal fade" id="addFriendModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <input type="text" class="form-control" id="saerchInput" name="id" placeholder="ID">
+            <button class="btn btn-danger" onclick="search()">Search</button>
+          </div>
+          <div id="result"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // 로그인 값을 받아 전달하는 기능
+    function login() {
+      $.ajax({
+        url: {{url_for('login')}}, // 요기에
+        type: 'POST',
+        data: $("#loginForm").serialize(),
+        dataType: 'JSON',
+        success: function (data) {
+          if (data.result == "success") {
+            window.location.href = data.redirect;
+          } else {
+            alert(data.message);
           }
-        });
-      }
+        },
+        error: function (xhr, status) {
+          alert(xhr + " : " + status);
+        }
+      });
+    }
 
-      // 회원가입 값을 받아 전달하는 기능
-      function signup() {
-        $.ajax({
-          url: {{url_for('signup')}}, // 요기에
-          type: 'POST',
-          data: $("#signupForm").serialize(),
-          dataType: 'JSON',
-          success: function (data) {
-            if (data.result == "success") {
-              window.location.href = data.redirect;
-            } else {
-              alert(data.message);
-            }
-          },
-          error: function (xhr, status) {
-            alert(xhr + " : " + status);
+    // 회원가입 값을 받아 전달하는 기능
+    function signup() {
+      $.ajax({
+        url: {{url_for('signup')}}, // 요기에
+        type: 'POST',
+        data: $("#signupForm").serialize(),
+        dataType: 'JSON',
+        success: function (data) {
+          if (data.result == "success") {
+            window.location.href = data.redirect;
+          } else {
+            alert(data.message);
           }
-        });
-      }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        },
+        error: function (xhr, status) {
+          alert(xhr + " : " + status);
+        }
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
-  </body>
+</body>
 
 </html>
