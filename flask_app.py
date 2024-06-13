@@ -195,10 +195,7 @@ _________________________________________________________
 # 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
 @app.route("/friends/")
 def friends():
-    addURL = url_for('addFriend')
-    searchURL = url_for('searchUser')
-    loadURL = url_for('loadFriend')
-    return render_template('friends.html',addURL=addURL,searchURL=searchURL,loadURL=loadURL)
+    return render_template('friends.html')
 
 # 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
 @app.route("/friends/load/")
@@ -206,8 +203,6 @@ def loadFriend():
     friends = db.session.query(User).join(Share, User.id == Share.shareid).filter(Share.id == session['id']).all()
     friends = [friend.obj_to_dict() for friend in friends]    
     return jsonify(result = "success",friends=friends)
-
-
 
 # 이승현 - 사용자 검색 - 사용자의 id를 기반으로 검색결과를 반환합니다.
 @app.route("/friends/search/",methods=["GET"])
@@ -240,6 +235,18 @@ def addFriend():
         db.session.add(share)
         db.session.commit()
         return  jsonify(result = "success")
+    
+# 이승현 - 친구로 추가하기 - 대상에게 나의 플레이리스트에 대한 접근을 허용합니다.
+@app.route("/friends/delete/",methods=["GET"])
+def deleteFriend(): 
+    id = request.args.get("id") 
+    if(isFriend(id)) :
+        share = db.session.query(Share).filter_by(id=session['id'],shareid =id).first()
+        db.session.delete(share)
+        db.session.commit()
+        return  jsonify(result = "success")
+    else :        
+        return jsonify(result = "fail",message="현재 친구가 아닙니다.") 
 
 def isFriend(id) :
     share = db.session.query(Share).filter_by(id=session['id'],shareid=id).first()
@@ -252,8 +259,12 @@ def isFriend(id) :
 @app.route("/playlists/")
 def playlists():
     if "id" in session:
-        playlists = Playlist.query.filter_by(id=session['id']).all()    
-        return render_template('playlists.html', playlists=playlists)
+        playlists = Playlist.query.filter_by(id=session['id']).all()           
+        addURL = url_for('addFriend')
+        searchURL = url_for('searchUser')
+        loadURL = url_for('loadFriend')
+        deleteURL = url_for('deleteFriend')
+        return render_template('playlists.html', playlists=playlists,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
     else :        
         return render_template('index.html')
 
