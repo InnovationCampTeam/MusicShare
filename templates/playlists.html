@@ -101,7 +101,7 @@
 
   </head>
 
-  <body>
+  <body data-bs-theme="light">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewbox="0 0 16 16">
         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
@@ -365,26 +365,7 @@
     </footer>
 
     <script type="text/javascript">
-      // 권지민: dark/light 모드
-      document.addEventListener('DOMContentLoaded', function() {
-      const themeToggle = document.getElementById('themeToggle');
-      const body = document.body;
-      
-      // Load the theme from localStorage
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      body.classList.toggle('dark-mode', savedTheme === 'dark');
-      body.classList.toggle('light-mode', savedTheme === 'light');
 
-      themeToggle.addEventListener('click', function() {
-        const isDarkMode = body.classList.contains('dark-mode');
-        
-        body.classList.toggle('dark-mode', !isDarkMode);
-        body.classList.toggle('light-mode', isDarkMode);
-
-        // Save the theme to localStorage
-        localStorage.setItem('theme', isDarkMode ? 'light' : 'dark');
-      });
-    });
       // 이승현 : 사용자 정보 관리를 위한 모달 기능
       var modal = $("#userModal");
       var button = $("#userButton");
@@ -597,6 +578,7 @@
       // loadFriend();
       changePassword();
     </script>
+    <script src="../static/js/color-mode.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
   </body>

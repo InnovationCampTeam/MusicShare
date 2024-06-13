@@ -1,13 +1,3 @@
-body.light-mode {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-body.dark-mode {
-  background-color: #121212;
-  color: #ffffff;
-}
-
 .theme-toggle {
   position: fixed;
   bottom: 20px;
@@ -30,15 +20,15 @@ body.dark-mode {
   transition: transform 0.3s ease;
 }
 
-body.light-mode .theme-toggle {
+[data-bs-theme="light"] .theme-toggle {
   background: #000000;
 }
 
-body.light-mode .theme-toggle .toggle-circle {
+[data-bs-theme="light"] .theme-toggle .toggle-circle {
   background: #ffffff;
   transform: translateX(0);
 }
 
-body.dark-mode .theme-toggle .toggle-circle {
+[data-bs-theme="dark"] .theme-toggle .toggle-circle {
   transform: translateX(40px);
 }
