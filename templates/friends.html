@@ -11,11 +11,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   </head>
 
-  <body>
-    <a class="col-5" type="button" data-bs-toggle="modal" data-bs-target="#Modal" style="color: blue; font-size: 13px;">친구 찾기</a>
+  <body style="width:100vw; height:100vh; display:flex;">
+    <div style="margin: auto; width:40vw; height:auto; display: flex; flex-direction:column; align-items: center; margin-top: 20vh">
+      <div class="" id="friendsList">
+      </div>
+      <a class="col" type="button" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="color: blue; font-size: 13px;">친구 찾기</a>
 
-     <!-- 회원가입 모달 -->
-     <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    </div>
+    
+     <div class="modal fade" id="addFriendModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -34,9 +38,6 @@
       </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-4 g-4 mx-auto w-75 pb-5" id="friendsList">
-    </div>
-
     <script type="text/javascript">
       result = $("#result")
       friendsList = $("#friendsList")
@@ -44,6 +45,7 @@
       var searchURL = "{{searchURL}}";
       var addURL = "{{addURL}}";
       var loadURL = "{{loadURL}}";
+      var deleteURL = "{{deleteURL}}"
       // 로그인 값을 받아 전달하는 기능
       function search() {
         $.ajax({
@@ -68,7 +70,7 @@
             alert(xhr + " : " + status);
           }
         });
-      }
+      }      
 
       function loadFriend(){
         $.ajax({
@@ -80,8 +82,9 @@
             if (data.result == "success") {
               friendsList.empty();
               for (var i = 0; i < data.friends.length; i++) {
-                friend = data.friends[i]
-                friendsList.append("<div class='row'><p class='col'>" + friend.id + "</p><p class='col'>"+ friend.username +"</p></div>")
+                friend = data.friends[i]                
+                id_formatted = "'" + friend.id + "'"
+                friendsList.append('<div class="row"><div class="col"><p>' + friend.id + '</p></div><div class="col"><p>'+ friend.username +'</p></div><div class="col"><button type="button" class="btn btn-danger" onclick="deleteFriend(' + id_formatted + ')">X</button></div></div>')
               }
             } else {
               alert(data.message);
@@ -115,9 +118,30 @@
         });
       }
 
+      function deleteFriend(id) {
+        $.ajax({
+          url: deleteURL,
+          type: 'GET',
+          data: {
+            id: id
+          },
+          dataType: 'JSON',
+          success: function (data) {
+            if (data.result == "success") {
+              loadFriend()
+            } else {
+              alert(data.message);
+            }
+          },
+          error: function (xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
+      }
+
       function userHTML(id, name) {
-        id_formatted = "'" + id + "'"
-        return '<div class="row"><div class="col"><p>' + id + '</p></div><div class="col"><p>' + name + '</p></div><div class="col"><button type="button" class="btn btn-danger" onclick="addFriend(' + id_formatted + ')">추가하기</button></div></div>'
+        id_formatted = '"' + id + '"'
+        return '<div class="row"><div class="col"><p>' + id + '</p></div><div class="col"><p>' + name + '</p></div><div class="col"><div class="col"><button type="button" class="btn btn-danger" onclick="addFriend(' + id_formatted + ')">추가하기</button></div></div></div>'
       }
 
       loadFriend();
