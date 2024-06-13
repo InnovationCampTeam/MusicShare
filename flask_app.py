@@ -265,15 +265,21 @@ def musics_create(plid):
     title_receive = request.args.get("musicTitle")
     artist_receive = request.args.get("musicArtist")
     album_receive = request.args.get("musicAlbum")
-    print(title_receive)
-    print(artist_receive)
-    print(album_receive)
-    print(plid)
   #  데이터 DB에 저장
     my_musicList = Music(title=title_receive, artist=artist_receive, url=album_receive, plid = plid)
     db.session.add(my_musicList)
     db.session.commit()
     return  jsonify(result = "success")
+
+# 권지민 - 음악 삭제하기
+@app.route('/playlists/<plid>/delete/<mid>', methods=['POST'])
+def musics_delete(plid, mid):
+    print(mid)
+    musicList = Music.query.get(mid)
+    if musicList:
+        db.session.delete(musicList)
+        db.session.commit()
+    return redirect(url_for('musics', plid=plid))
 
 
 

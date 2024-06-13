@@ -64,7 +64,7 @@
           <tbody>
             {% for music in musics %}
             <tr>
-              <th scope="row">{{ music.id }}</th>
+              <th scope="row">{{ music.mid }}</th>
               <td>
                 <img
                   src="{{ music.url }}"
@@ -75,7 +75,12 @@
               <td>{{ music.title }}</td>
               <td>{{ music.artist }}</td>
               <td>
-                <button type="button " class="btn btn-danger">삭제</button>
+                <form
+                  action="{{ url_for('musics_delete', plid=playlist.plid, mid=music.mid) }}"
+                  method="post"
+                >
+                  <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
               </td>
             </tr>
             {% endfor %}
