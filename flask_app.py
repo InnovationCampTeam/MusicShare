@@ -25,6 +25,14 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
 
+    # for build json format
+    def obj_to_dict(self):  
+        return {
+            "id": self.id,
+            "password": self.password,
+            "username": self.username,
+        }
+
 class Playlist(db.Model):  
     __tablename__ = 'Playlist'  
     plid = db.Column(db.Integer, primary_key=True,autoincrement=True)
@@ -180,40 +188,65 @@ def withdraw():
     session.pop('id', None)
     return jsonify(result = "success",redirect='/')
 
+'''
+_________________________________________________________
+사용자간 공유 기능
+'''
 # 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
 @app.route("/friends/")
-def friends():        
+def friends():
+    addURL = url_for('addFriend')
+    searchURL = url_for('searchUser')
+    loadURL = url_for('loadFriend')
+    return render_template('friends.html',addURL=addURL,searchURL=searchURL,loadURL=loadURL)
+
+# 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
+@app.route("/friends/load/")
+def loadFriend():    
     friends = db.session.query(User).join(Share, User.id == Share.shareid).filter(Share.id == session['id']).all()
-    return render_template('friends.html',friends=friends)
+    friends = [friend.obj_to_dict() for friend in friends]    
+    return jsonify(result = "success",friends=friends)
+
+
+
+# 이승현 - 사용자 검색 - 사용자의 id를 기반으로 검색결과를 반환합니다.
+@app.route("/friends/search/",methods=["GET"])
+def searchUser():        
+    input = request.args.get("input")
+    users = db.session.query(User).filter(User.id.like('%'+input+'%')).filter(User.id != session['id']).filter(User.id.notin_(db.session.query(Share.shareid).filter(Share.id == session['id']))).all()
+    users = [user.obj_to_dict() for user in users]   
+    return  jsonify(result = "success",users=users)
+
 
 # 이승현 - 친구의 플레이리스트 불러오기
 @app.route("/friends/playlist/<id>")
 def friendplaylist(id):        
-    if not isFriend(id):
-        # 친구 관계 아님
-        return  redirect(url_for('friends'))
-    else :
+    if isFriend(id):
         playlists = User.query.filter_by(id=id).all()    
         return render_template('friends_playlists.html',playlists=playlists)
-
+    else :
+        # 친구 관계 아님
+        return  redirect(url_for('friends'))
 
 # 이승현 - 친구로 추가하기 - 대상에게 나의 플레이리스트에 대한 접근을 허용합니다.
-@app.route("/friends/add/<id>")
-def friendadd(id):        
-    if isFriend(id):
-        # 이미 친구 관계임
-        return jsonify(result = "fail",message="이미 공유가 되어있습니다.")    
-    else :
+@app.route("/friends/add/",methods=["GET"])
+def addFriend(): 
+    id = request.args.get("id") 
+
+    if(isFriend(id)) :
+        return jsonify(result = "fail",message="이미 공유가 되어있습니다.") 
+    else :        
         share = Share(id=session['id'],shareid =id)
         db.session.add(share)
         db.session.commit()
         return  jsonify(result = "success")
 
-# 이승현 - 친구 관계 확인하는 함수
-def isFriend(id):
-    if db.session.query(Share).filter_by(id=session['id'],shareid=id).first() == None :
-        return True
-    return False
+def isFriend(id) :
+    share = db.session.query(Share).filter_by(id=session['id'],shareid=id).first()
+    if share == None :
+        return False   
+    return True
+
 
 # 권영찬 - 플레이리스트 페이지 : 사용자의 플레이리스트 목록을 불러옴
 @app.route("/playlists/")
