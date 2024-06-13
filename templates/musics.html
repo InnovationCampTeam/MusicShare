@@ -1,29 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   </head>
 
-  <body>    
-   <div class="card h-100">
-      <img src="{{ playlist.img }}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{ playlist.name }}</h5>
-        <p class="card-text">{{ playlist.img }}</p>
+  <body>
+    <section>
+      {% if playlist.img %}
+      <div style="height: 300px; overflow: hidden">
+        <img
+          src="{{ playlist.img }}"
+          class="img-fluid"
+          alt="플레이리스트 커버 이미지"
+          style="object-fit: cover; width: 100%; height: 100%"
+        />
       </div>
-    </div>   
-    
-    
-    <script type="text/javascript">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  </body>
+      {% endif %}
+      <button
+        type="button"
+        onclick="javascript:history.back()"
+        class="btn"
+        style="font-size: 18px"
+      >
+        ← 뒤로가기
+      </button>
+      <h1 class="card-title">{{ playlist.name }}</h1>
+      <div class="d-flex flex-row-reverse">
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin-bottom: 20px"
+          data-bs-toggle="modal"
+          data-bs-target="#Modal"
+        >
+          음악을 추가해보세요
+        </button>
+      </div>
+      <div>
+        <table class="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">앨범</th>
+              <th scope="col">타이틀</th>
+              <th scope="col">가수 이름</th>
+              <th scope="col">동작</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for music in musics %}
+            <tr>
+              <th scope="row">{{ music.mid }}</th>
+              <td>
+                <img
+                  src="{{ music.url }}"
+                  alt="앨범 자켓"
+                  style="width: 40px; height: 40px; object-fit: cover"
+                />
+              </td>
+              <td>{{ music.title }}</td>
+              <td>{{ music.artist }}</td>
+              <td>
+                <form
+                  action="{{ url_for('musics_delete', plid=playlist.plid, mid=music.mid) }}"
+                  method="post"
+                >
+                  <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
 
+    <!-- 음악 추가 모달 -->
+    <div
+      class="modal fade"
+      id="Modal"
+      tabindex="-1"
+      aria-labelledby="ModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalLabel">음악 등록하기</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form method="GET" id="createMusicForm">
+              <div class="mb-3">
+                <label for="musicTitle" class="form-label">제목</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="musicTitle"
+                  name="musicTitle"
+                  placeholder="제목을 입력하세요."
+                />
+              </div>
+              <div class="mb-3">
+                <label for="musicArtist" class="form-label">가수 이름</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="musicArtist"
+                  name="musicArtist"
+                  placeholder="가수 이름을 입력하세요."
+                />
+              </div>
+              <div class="mb-3">
+                <label for="musicAlbum" class="form-label">앨범 자켓</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="musicAlbum"
+                  name="musicAlbum"
+                  placeholder="앨범 자켓 이미지를 입력하세요."
+                />
+              </div>
+              <button type="button" onclick="musicCreate()">등록하기</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div
+    class="modal fade"
+    id="Modal"
+    tabindex="-1"
+    aria-labelledby="ModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" id="">
+            <div class="container text-center">
+              <div class="row justify-content-start">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">🔎</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="노래 제목으로 검색해 보세요."
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                  />
+                </div>
+                <button
+                  class="btn btn-primary"
+                  type="submit"
+                  style="margin-bottom: 24px"
+                >
+                  검색하기
+                </button>
+                <table class="table table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">앨범</th>
+                      <th scope="col">타이틀</th>
+                      <th scope="col">가수 이름</th>
+                      <th scope="col">동작</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Mark</td>
+                      <td>Otto</td>
+                      <td>@mdo</td>
+                      <td>
+                        <button type="button" class="btn btn-primary">
+                          추가
+                        </button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Jacob</td>
+                      <td>Thornton</td>
+                      <td>@fat</td>
+                      <td>
+                        <button type="button" class="btn btn-primary">
+                          추가
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+    <script type="text/javascript">
+      // 음악 생성하기
+      var createUrl = "{{ create_url }}";
+      function musicCreate() {
+        $.ajax({
+          url: createUrl,
+          type: "GET",
+          data: $("#createMusicForm").serialize(),
+          dataType: "JSON",
+          success: function (data) {
+            if (data.result == "success") {
+              location.reload();
+            } else {
+              alert(data.message);
+            }
+          },
+          error: function (xhr, status) {
+            alert(xhr + " : " + status);
+          },
+        });
+      }
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
