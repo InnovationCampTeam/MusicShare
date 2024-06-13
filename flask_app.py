@@ -38,7 +38,6 @@ class Music(db.Model):
     plid = db.Column(db.Integer,ForeignKey('Playlist.plid'))
     title = db.Column(db.String(100), nullable=False)
     artist = db.Column(db.String(100), nullable=False)
-    
     url = db.Column(db.String(100), nullable=False)
 
 class Share(db.Model):    
@@ -60,7 +59,7 @@ _________________________________________________________
 @app.route("/")
 def home():
     if "id" in session:
-        return redirect(url_for('playlist', id=session['id']))
+        return redirect(url_for('playlists'))
     else :        
         return render_template('index.html')
 
@@ -82,7 +81,7 @@ def login():
         session['id'] = id
         session['username'] = user.username
         # 플레이리스트 페이지로 이동 명령 전달
-        return jsonify(result = "success",redirect='playlist/'+id)
+        return jsonify(result = "success",redirect='/playlist')
     else :
         # 로그인 정보가 올바르지 않음 전달
         return jsonify(result = "fail",message="회원 정보가 일치하지 않습니다.")
@@ -113,7 +112,7 @@ def signup():
                 db.session.commit()                
                 session['id'] = id
                 session['username'] = name
-                return jsonify(result = "success",redirect='playlist/'+id)
+                return jsonify(result = "success",redirect='/playlists')
             else :        
                 # 비밀번호 정규식이 맞지 않을 경우
                 return jsonify(result = "fail",message="적절하지 않은 비밀번호입니다.")
@@ -160,7 +159,6 @@ def changePassword():
         else :
             return jsonify(result = "fail",message="비밀번호가 일치하지 않습니다.")
 
-
 # 이승현 - 이름 변경 : 사용자 이름 변경
 @app.route("/changeName/",methods=['POST'])
 def changeName():
@@ -182,18 +180,87 @@ def withdraw():
     session.pop('id', None)
     return jsonify(result = "success",redirect='/')
 
+# 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
+@app.route("/friends/")
+def friends():        
+    friends = db.session.query(User).join(Share, User.id == Share.shareid).filter(Share.id == session['id']).all()
+    return render_template('friends.html',friends=friends)
+
+# 이승현 - 친구의 플레이리스트 불러오기
+@app.route("/friends/playlist/<id>")
+def friendplaylist(id):        
+    if not isFriend(id):
+        # 친구 관계 아님
+        return  redirect(url_for('friends'))
+    else :
+        playlists = User.query.filter_by(id=id).all()    
+        return render_template('friends_playlists.html',playlists=playlists)
 
 
-@app.route("/playlist/<id>/")
-def playlist(id):
-    playlists = Playlist.query.filter_by(id=id).all()    
-    return render_template('playlists.html', playlists=playlists)
+# 이승현 - 친구로 추가하기 - 대상에게 나의 플레이리스트에 대한 접근을 허용합니다.
+@app.route("/friends/add/<id>")
+def friendadd(id):        
+    if isFriend(id):
+        # 이미 친구 관계임
+        return jsonify(result = "fail",message="이미 공유가 되어있습니다.")    
+    else :
+        share = Share(id=session['id'],shareid =id)
+        db.session.add(share)
+        db.session.commit()
+        return  jsonify(result = "success")
 
-@app.route("/playlist/")
-def playlist_call():
-    return render_template('playlists.html', playlists=playlists)
+# 이승현 - 친구 관계 확인하는 함수
+def isFriend(id):
+    if db.session.query(Share).filter_by(id=session['id'],shareid=id).first() == None :
+        return True
+    return False
+
+# 권영찬 - 플레이리스트 페이지 : 사용자의 플레이리스트 목록을 불러옴
+@app.route("/playlists/")
+def playlists():
+    if "id" in session:
+        playlists = Playlist.query.filter_by(id=session['id']).all()    
+        return render_template('playlists.html', playlists=playlists)
+    else :        
+        return render_template('index.html')
+
+# 권영찬 - Playlist 생성하기
+@app.route('/playlists/create')
+def playlist_create():
+  #  데이터 입력받기
+    playlist_name_receive = request.args.get("playlist_name")
+    img_receive = request.args.get("img_url")
+  #  데이터 DB에 저장
+    my_playlist = Playlist(name=playlist_name_receive, img=img_receive, id =session['id'])
+    db.session.add(my_playlist)
+    db.session.commit()
+    return redirect(url_for('playlists'))
+
+# 권영찬 - Playlist 삭제하기
+@app.route('/playlists/delete/<int:plid>', methods=['POST'])
+def playlist_delete(plid):
+    playlist = Playlist.query.get(plid)
+    if playlist:
+        db.session.delete(playlist)
+        db.session.commit()
+    return redirect(url_for('playlists'))
 
 
+# 권지민 - 음악 페이지 : 특정 플레이리스트에 포함된 음악 목록을 불러옴
+@app.route("/playlists/<plid>/")
+def musics(plid):
+    print("접근!!!")
+    if "id" in session:
+        playlist = Playlist.query.filter_by(id=session['id']).first()
+        musics = Music.query.filter_by(plid=plid).all()    
+        return render_template('musics.html', musics=musics,playlist=playlist)
+    else :        
+        return redirect(url_for('playlists'))
+
+
+
+# 이승현 : 아래 코드는 음악 예시했을때 썼던 거라 남겨뒀습니다.
+# 개발에 아무 영향도 없지만 참고용으로 사용한 내용이라 추후 삭제에 필요합니다
 @app.route("/music/create/")
 def music_create():
     #form에서 보낸 데이터 받아오기
@@ -208,7 +275,6 @@ def music_create():
     db.session.commit()
     return redirect(url_for('render_music_filter', username=username_receive))
 
-# 음악 삭제 부분 구현됨 : 2024-06-11 / 이승현
 @app.route("/music/delete/")
 def music_delete():
     #form에서 보낸 데이터 받아오기
@@ -225,40 +291,6 @@ def music_delete():
     # 사용자의 음악이 하나인 경우에 대비해 모든 음악을 확인할 수 있는 music.html로 이동합니다.
     return redirect(url_for('music'))
 
-# Playlist Page
-@app.route('/')
-def home():
-    playlist = Playlist.query.all()
-    return render_template('index.html', data=playlist)
-
-@app.route('/playlist/<id>')
-def mypage(id):
-    name = f"{id}의 Playlist"
-    playlist = Playlist.query.filter_by(id=id).all()
-    return render_template('index.html', data=name)
-
-# Playlist 생성하기
-@app.route('/playlist/create')
-def playlist_create():
-  #  데이터 입력받기
-    playlist_name_receive = request.args.get("playlist_name")
-    img_receive = request.args.get("img_url")
-  #  데이터 DB에 저장
-    my_playlist = Playlist(name=playlist_name_receive, img=img_receive)
-    db.session.add(my_playlist)
-    db.session.commit()
-    return render_template('index.html')
-
-# Playlist 삭제하기
-@app.route('/playlist/delete/<int:plid>', methods=['POST'])
-def playlist_delete(plid):
-    playlist = Playlist.query.get(plid)
-    if playlist:
-        db.session.delete(playlist)
-        db.session.commit()
-    return redirect(url_for('home'))
-
-# Playlist 수정하기
 
 if __name__ == "__main__":
     app.run(debug=True)
