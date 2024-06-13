@@ -22,8 +22,16 @@
   </head>
   <body>
     <section>
-      <h1>음악 리스트</h1>
-      <button type="button" class="btn btn-danger">음악 추가하기</button>
+      <h1>플레이리스트 이름을 넣을거야</h1>
+      <div class="d-flex flex-row-reverse">
+        <button
+          type="button"
+          class="btn btn-primary"
+          style="margin-bottom: 20px"
+        >
+          음악을 추가해보세요
+        </button>
+      </div>
       <div>
         <table class="table table-dark table-hover">
           <thead>
@@ -32,6 +40,7 @@
               <th scope="col">앨범</th>
               <th scope="col">타이틀</th>
               <th scope="col">가수 이름</th>
+              <th scope="col">동작</th>
             </tr>
           </thead>
           <tbody>
@@ -40,17 +49,26 @@
               <td>Mark</td>
               <td>Otto</td>
               <td>@mdo</td>
+              <td>
+                <button type="button " class="btn btn-danger">삭제</button>
+              </td>
             </tr>
             <tr>
               <th scope="row">2</th>
               <td>Jacob</td>
               <td>Thornton</td>
               <td>@fat</td>
+              <td>
+                <button type="button" class="btn btn-danger">삭제</button>
+              </td>
             </tr>
             <tr>
               <th scope="row">3</th>
               <td colspan="2">Larry the Bird</td>
               <td>@twitter</td>
+              <td>
+                <button type="button" class="btn btn-danger">삭제</button>
+              </td>
             </tr>
           </tbody>
         </table>
