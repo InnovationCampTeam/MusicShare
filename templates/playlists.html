@@ -24,6 +24,9 @@
     <!-- 이승현 : 회원 정보 수정을 위한 모달 호출 버튼 -->
     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#updateModal">회원 정보 수정</button>
 
+    <!-- 이승현 : 친구 페이지로 이동하기 위한 버튼 -->
+    <button type="button" class="btn btn-danger" onclick="location.href='/friends'">친구 관리</button>
+
     <!-- 이승현 : 회원 정보 수정 모달 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -45,22 +48,78 @@
               </li>
             </ul>
 
-            <form method="POST" id="userModal">
-            </form>
+            <form method="POST" id="userModal"></form>
             <button id="userButton" type="button" class="btn btn-danger" onclick="signup()">SignUp</button>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- 권영찬 : 플레이리스트 생성 -->
+    <h1>My Playlist</h1>
+    <div class="make-playlist">
+      <div>플레이리스트 생성</div>
+      <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">+</button>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Playlist 만들기</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('playlist_create') }}" method="GET">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Playlist 이름</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="playlist_name"/>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">커버 이미지</label>
+                <input type="text" class="form-control" id="exampleInputPassword1" name="img_url"/>
+              </div>
+              <button type="submit" class="btn btn-primary">생성하기</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 권영찬 : 플레이리스트 목록 -->
+    <div id="card-list" class="row row-cols-1 row-cols-md-4 g-4 mx-auto w-75 pb-5">
+    {% for playlist in playlists %}
+      <div class="col">
+        <!-- 이승현 : 개발 편의를 위해 음악 페이지 이동 버튼을 추가했습니다. -->
+        <button type="button" class="sign-up-button" onclick="window.location.href='{{ url_for('musics',plid=playlist.plid) }}';">자세히보기</button>
+
+        <div class="card h-100">
+          <img src="{{ playlist.img }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{ playlist.name }}</h5>
+            <p class="card-text">{{ playlist.img }}</p>
+          </div>
+
+        </div>        
+      </div>
+      <form action="{{ url_for('playlist_delete', plid=playlist.plid) }}" method="post">
+        <button type="submit">삭제</button>
+      </form>
+    {% endfor %}
+    </div>
+
+    
     <script type="text/javascript">
+      // 이승현 : 사용자 정보 관리를 위한 모달 기능
       modal = $("#userModal");
       button = $("#userButton");
-
+      
+      // 이승현 : HTML 요소 생성하는 기능
       function inputHTML(id, type, name, text) {
         return '<div class="mb-3"><label for="' + id + '" class="form-label">' + text + '</label>' + '<input type="' + type + '" class="form-control" id="' + id + '" aria-describedby="' + id + '" name="' + name + '">'
       }
 
+      // 이승현 : 암호 변경으로 모드 변경
       function changePassword() {
         console.log("changePassword!!")
         modal.fadeOut(200, function () {
@@ -74,6 +133,7 @@
         button.attr("onclick", "changePassword_Post()");
       }
 
+      // 이승현 : 이름 변경으로 모드 변경
       function changeName() {
         console.log("changeName!!")
         modal.fadeOut(200, function () {
@@ -85,6 +145,7 @@
         button.attr("onclick", "changeName_Post()");
       }
 
+      // 이승현 : 탈퇴로 변경
       function withdraw() {
         console.log("withdraw!!")
         modal.fadeOut(200, function () {
@@ -94,7 +155,8 @@
         });
         button.attr("onclick", "withdraw_Post()");
       }
-
+      
+      // 이승현 : 암호 변경 요청
       function changePassword_Post() {
         $.ajax({
           url: {{url_for('changePassword')}}, // 요기에
@@ -113,7 +175,8 @@
           }
         });
       }
-
+ 
+      // 이승현 : 이름 변경 요청
       function changeName_Post() {
         $.ajax({
           url: {{url_for('changeName')}}, // 요기에
@@ -132,7 +195,8 @@
           }
         });
       }
-
+ 
+      // 이승현 : 탈퇴 요청
       function withdraw_Post() {
         $.ajax({
           url: {{url_for('withdraw')}}, // 요기에
