@@ -253,9 +253,27 @@ def musics(plid):
     if "id" in session:
         playlist = Playlist.query.filter_by(id=session['id']).first()
         musics = Music.query.filter_by(plid=plid).all()    
-        return render_template('musics.html', musics=musics,playlist=playlist)
-    else :        
+        create_url = url_for('musics_create', plid=plid)
+        return render_template('musics.html', musics=musics,playlist=playlist,create_url=create_url)
+    else :         
         return redirect(url_for('playlists'))
+    
+# 권지민 - 음악 추가하기
+@app.route('/playlists/<plid>/create', methods=['GET'])
+def musics_create(plid):
+  #  데이터 입력받기
+    title_receive = request.args.get("musicTitle")
+    artist_receive = request.args.get("musicArtist")
+    album_receive = request.args.get("musicAlbum")
+    print(title_receive)
+    print(artist_receive)
+    print(album_receive)
+    print(plid)
+  #  데이터 DB에 저장
+    my_musicList = Music(title=title_receive, artist=artist_receive, url=album_receive, plid = plid)
+    db.session.add(my_musicList)
+    db.session.commit()
+    return  jsonify(result = "success")
 
 
 
@@ -293,4 +311,4 @@ def music_delete():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=4000)
