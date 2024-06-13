@@ -74,6 +74,26 @@
       </div>
     </div>
 
+    <!-- 사용자 검색 및 친구 추가 모달-->
+    <div class="modal fade" id="addFriendModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <input type="text" class="form-control" id="saerchInput" name="id" placeholder="ID">
+              <button class="btn btn-danger" onclick="search()">Search</button>
+            </div>
+            <div id="result">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       // 로그인 값을 받아 전달하는 기능
       function login() {
