@@ -284,7 +284,7 @@ def playlist_create():
     db.session.commit()
     return redirect(url_for('playlists'))
 
-# 권영찬 - Playlist 삭제하기
+# 류영찬 - Playlist 삭제하기
 @app.route('/playlists/delete/<int:plid>', methods=['POST'])
 def playlist_delete(plid):
     playlist = Playlist.query.get(plid)
@@ -293,6 +293,17 @@ def playlist_delete(plid):
         db.session.commit()
     return redirect(url_for('playlists'))
 
+# 류영찬 - Playlist 수정하기
+@app.route('/playlists/edit/<int:plid>', methods=['GET', 'POST'])
+def playlist_edit(plid):
+    playlist = Playlist.query.get(plid)
+    if request.method == 'POST':
+        playlist.name = request.form.get('playlist_name')
+        playlist.img = request.form.get('img_url')
+        db.session.commit()
+        return redirect(url_for('playlists'))
+    
+    return render_template('playlists_edit.html', playlist=playlist)
 
 # 권지민 - 음악 페이지 : 특정 플레이리스트에 포함된 음악 목록을 불러옴
 @app.route("/playlists/<plid>/")
