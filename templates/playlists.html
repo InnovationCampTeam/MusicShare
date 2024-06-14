@@ -1,6 +1,4 @@
-{% extends "layout.html" %}
-
-{% block style %}
+{% extends "layout.html" %} {% block style %}
 <style>
   .bd-placeholder-img {
     font-size: 1.125rem;
@@ -19,10 +17,11 @@
   .b-example-divider {
     width: 100%;
     height: 3rem;
-    background-color: rgba(0, 0, 0, .1);
-    border: solid rgba(0, 0, 0, .15);
+    background-color: rgba(0, 0, 0, 0.1);
+    border: solid rgba(0, 0, 0, 0.15);
     border-width: 1px 0;
-    box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, .1), inset 0 0.125em 0.5em rgba(0, 0, 0, .15);
+    box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+      inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
   }
 
   .b-example-vr {
@@ -32,7 +31,7 @@
   }
 
   .bi {
-    vertical-align: -.125em;
+    vertical-align: -0.125em;
     fill: currentColor;
   }
 
@@ -79,88 +78,293 @@
     display: block !important;
   }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <main>
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=200" style="width:100vw; position: absolute;z-index:-99" />
+  <img
+    src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=200"
+    style="width: 100vw; position: absolute; z-index: -99"
+  />
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">
-          <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit; font-size: 5vh; font-weight:700;">{{session['username']}}님 반갑습니다.</font>
+          <font style="vertical-align: inherit">
+            <font
+              style="vertical-align: inherit; font-size: 5vh; font-weight: 700"
+              >{{session['username']}}님 반갑습니다.</font
+            >
           </font>
         </h1>
         <p class="lead text-body-secondary">
-          <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit; font-size: 2vh; font-weight:700;">안녕하세요! 뮤직 쉐어에 오신 것을 환영합니다.</font>
+          <font style="vertical-align: inherit">
+            <font
+              style="vertical-align: inherit; font-size: 2vh; font-weight: 700"
+              >안녕하세요! 뮤직 쉐어에 오신 것을 환영합니다.</font
+            >
           </font>
         </p>
         <p>
-          <a href="https://getbootstrap.kr/docs/5.3/examples/album-rtl/#" class="btn btn-primary my-2">
-            <font style="vertical-align: inherit;">
-              <font style="vertical-align: inherit;">주요 행동 촉구</font>
-            </font>
-          </a>
-          <a href="https://getbootstrap.kr/docs/5.3/examples/album-rtl/#" class="btn btn-secondary my-2">
-            <font style="vertical-align: inherit;">
-              <font style="vertical-align: inherit;">보조 작업</font>
+          <button
+            type="button"
+            class="btn btn-light"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Playlist 추가
+          </button>
+          <a
+            href="https://getbootstrap.kr/docs/5.3/examples/album-rtl/#"
+            class="btn btn-primary my-2"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            <font style="vertical-align: inherit">
+              <font style="vertical-align: inherit">Playlist 추가</font>
             </font>
           </a>
         </p>
       </div>
     </div>
   </section>
+  <!-- Modal Playlist 추가 -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">My Playlist</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-body">
+            <form action="{{ url_for('playlist_create') }}" method="GET">
+              <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"
+                  >Playlist 이름</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  name="playlist_name"
+                />
+                <div id="emailHelp" class="form-text">
+                  Playlist의 제목을 적어주세요!
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label"
+                  >커버 이미지</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  name="img_url"
+                />
+                <div id="emailHelp" class="form-text">
+                  Playlist의 배경 이미지 주소를 적어주세요!
+                </div>
+              </div>
+              <button type="submit" class="btn btn-outline-primary">
+                만들기
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="album py-5 bg-body-tertiary">
     <div class="container">
-      {% if playlists%}
+      {% if playlists %}
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {% for playlist in playlists %}
-          <div class="col">
-            <div class="card shadow-sm">
-              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="자리표시자: 썸네일" preserveaspectratio="xMidYMid slice" focusable="false">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#55595c"></rect>
-                <text x="50%" y="50%" fill="#eceeef" dy=".3em">플레이리스트 이름</text>
-              </svg>
+        <div class="col">
+          <div class="card shadow-sm">
+            <a href="{{ url_for('musics', plid=playlist.plid) }}">
+              <img
+                class="bd-placeholder-img card-img-top"
+                width="100%"
+                height="225"
+                object-fit="cover"
+                src="{{ playlist.img }}"
+                alt="..."
+              />
               <div class="card-body">
                 <p class="card-text">
-                  <font style="vertical-align: inherit;">
-                    <font style="vertical-align: inherit;">플레이리스트 이름</font>
+                  <font style="vertical-align: inherit">
+                    <font style="vertical-align: inherit"
+                      >{{ playlist.name }}</font
+                    >
                   </font>
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                      <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">수정</font>
+                    <a
+                      href="{{ url_for('playlist_edit', plid=playlist.plid) }}"
+                      class="btn btn-sm btn-outline-secondary"
+                    >
+                      <font style="vertical-align: inherit">
+                        <font style="vertical-align: inherit">수정</font>
                       </font>
-                    </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">
-                      <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">삭제</font>
-                      </font>
-                    </button>
+                    </a>
+                    <form
+                      action="{{ url_for('playlist_delete', plid=playlist.plid) }}"
+                      method="POST"
+                      style="display: inline"
+                    >
+                      <button
+                        type="submit"
+                        class="btn btn-sm btn-outline-secondary"
+                      >
+                        <font style="vertical-align: inherit">
+                          <font style="vertical-align: inherit">삭제</font>
+                        </font>
+                      </button>
+                    </form>
                   </div>
                   <small class="text-body-secondary">
-                    <font style="vertical-align: inherit;">
-                      <font style="vertical-align: inherit;">9분</font>
+                    <font style="vertical-align: inherit">
+                      <font style="vertical-align: inherit">9분</font>
                     </font>
                   </small>
                 </div>
-              </div>
-            </div>
+              </div></a
+            >
           </div>
+        </div>
         {% endfor %}
       </div>
-      {% else %}      
+      {% else %}
+      <div class="col">
+        <div class="card shadow-sm">
+          <svg
+            class="bd-placeholder-img card-img-top"
+            width="100%"
+            height="225"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-label="자리표시자: 썸네일"
+            preserveaspectratio="xMidYMid slice"
+            focusable="false"
+          >
+            <title>Placeholder</title>
+            <rect width="100%" height="100%" fill="#55595c"></rect>
+            <text x="50%" y="50%" fill="#eceeef" dy=".3em">
+              playlist 추가 버튼을 눌러, 나만의 "Playlist"를 만들어 보세요!
+            </text>
+          </svg>
+          <div class="card-body">
+            <p class="card-text">
+              <font style="vertical-align: inherit">
+                <font style="vertical-align: inherit">My Music Playlist</font>
+              </font>
+            </p>
+          </div>
+        </div>
+      </div>
       {% endif %}
     </div>
   </div>
-</main>
-{% endblock %}   
-{% block script %}
 
-{% endblock %}   
+  <!-- 이승현 : 회원 정보 수정 모달 -->
+  <div
+    class="modal fade"
+    id="updateModal"
+    tabindex="-1"
+    aria-labelledby="ModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <ul class="nav nav-tabs justify-content-center">
+            <li class="nav-item">
+              <a id="userNav" class="nav-link" onclick="changePassword()"
+                >비밀번호 변경</a
+              >
+            </li>
+            <li class="nav-item">
+              <a id="userNav" class="nav-link" onclick="changeName()"
+                >이름 변경</a
+              >
+            </li>
+            <li class="nav-item">
+              <a id="userNav" class="nav-link" onclick="withdraw()"
+                >회원 탈퇴</a
+              >
+            </li>
+          </ul>
+          <form method="POST" id="userModal"></form>
+          <button
+            id="userButton"
+            type="button"
+            class="btn btn-danger"
+            onclick="signup()"
+          >
+            확인
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사용자 검색 및 친구 추가 모달 -->
+  <div
+    class="modal fade"
+    id="addFriendModal"
+    tabindex="-1"
+    aria-labelledby="ModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <input
+              type="text"
+              class="form-control"
+              id="saerchInput"
+              name="id"
+              placeholder="ID"
+            />
+            <button class="btn btn-danger" onclick="search()">Search</button>
+          </div>
+          <div id="result"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %} {% block script %} {% endblock %}

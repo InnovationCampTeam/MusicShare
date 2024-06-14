@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlist 수정</title>
+</head>
+<body>
+  <h1>플레이리스트 수정</h1>
+  <form action="{{ url_for('playlist_edit', plid=playlist.plid) }}" method="post">
+    <label for="playlist_name">Playlist 이름:</label>
+    <input type="text" id="playlist_name" name="playlist_name" value="{{ playlist.name }}" required><br><br>
+
+    <label for="img_url">커버 이미지:</label>
+    <input type="text" id="img_url" name="img_url" value="{{ playlist.img }}" required><br><br>
+    <input type="submit" value="수정">
+  </form>
+  <a href="{{ url_for('playlists') }}">뒤로</a>
+</body>
+</html>
