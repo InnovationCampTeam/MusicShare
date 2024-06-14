@@ -106,7 +106,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
+            <h1 class="modal-title fs-5" id="ModalLabel">회원 정보 관리</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -235,6 +235,7 @@
         usermodal.fadeOut(200, function () {
           usermodal.empty();
           usermodal.innerHTML = "";
+          usermodal.append("<p>모든 정보가 삭제됩니다.</p>");
           usermodal.fadeIn(200);
         });
         button.attr("onclick", "withdraw_Post()");
