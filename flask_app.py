@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for,session,jsonify
+from flask import Flask, flash, render_template, request, redirect, url_for,session,jsonify
 app = Flask(__name__)
 # DB 기본 코드
 import os
@@ -193,11 +193,6 @@ _________________________________________________________
 사용자간 공유 기능
 '''
 # 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
-@app.route("/friends/")
-def friends():
-    return render_template('friends.html')
-
-# 이승현 - 공유 페이지 : 공유된 대상 목록 페이지를 불러옵니다.
 @app.route("/friends/load/")
 def loadFriend():    
     friends = db.session.query(User).join(Share, User.id == Share.shareid).filter(Share.id == session['id']).all()
@@ -226,7 +221,8 @@ def friendPlaylist(id):
         return render_template('friends_playlists.html',friend=friend,playlists=playlists,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
     else :
         # 친구 관계 아님
-        return  redirect(url_for('friends'))
+        flash('현재 친구로 추가되지 않은 사용자입니다.')
+        return  redirect(url_for('playlists'))
 
 # 이승현 - 친구로 추가하기 - 대상에게 나의 플레이리스트에 대한 접근을 허용합니다.
 @app.route("/friends/add/",methods=["GET"])

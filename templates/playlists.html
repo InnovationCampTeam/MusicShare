@@ -87,12 +87,12 @@
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">
           <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit;">{{session['username']}}님 반갑습니다.</font>
+            <font style="vertical-align: inherit; font-size: 5vh; font-weight:700;">{{session['username']}}님 반갑습니다.</font>
           </font>
         </h1>
         <p class="lead text-body-secondary">
           <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit;">안녕하세요! 뮤직 쉐어에 오신 것을 환영합니다.</font>
+            <font style="vertical-align: inherit; font-size: 2vh; font-weight:700;">안녕하세요! 뮤직 쉐어에 오신 것을 환영합니다.</font>
           </font>
         </p>
         <p>
@@ -155,52 +155,6 @@
       </div>
       {% else %}      
       {% endif %}
-    </div>
-  </div>
-
-  <!-- 이승현 : 회원 정보 수정 모달 -->
-  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-              <a id="userNav" class="nav-link" onclick="changePassword()">비밀번호 변경</a>
-            </li>
-            <li class="nav-item">
-              <a id="userNav" class="nav-link" onclick="changeName()">이름 변경</a>
-            </li>
-            <li class="nav-item">
-              <a id="userNav" class="nav-link" onclick="withdraw()">회원 탈퇴</a>
-            </li>
-          </ul>
-          <form method="POST" id="userModal"></form>
-          <button id="userButton" type="button" class="btn btn-danger" onclick="signup()">확인</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 사용자 검색 및 친구 추가 모달 -->
-  <div class="modal fade" id="addFriendModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <input type="text" class="form-control" id="saerchInput" name="id" placeholder="ID">
-            <button class="btn btn-danger" onclick="search()">Search</button>
-          </div>
-          <div id="result"></div>
-        </div>
-      </div>
     </div>
   </div>
 </main>

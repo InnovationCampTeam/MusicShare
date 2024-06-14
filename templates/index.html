@@ -50,7 +50,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- 회원가입 모달 -->
@@ -66,19 +65,19 @@
             <div class="mb-3">
               <label for="SignupID" class="form-label">ID</label>
               <input type="text" class="form-control" id="SignupID" name="id">
-              <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 8-14자</div>
+              <div class="form-text">최소 한개의 영문자와 숫자[8-14]</div>
             </div>
             <div class="mb-3">
               <label for="SignupPassword" class="form-label">Password</label>
               <input type="password" class="form-control" id="SignupPassword" name="password">
-              <div class="form-text">최소 한개의 영문자 + 최소 한개의 숫자 + 최소 한개의 특수 문자 + 10-20자</div>
+              <div class="form-text">최소 한개의 영문자와 숫자, 특수 문자[10-20]</div>
             </div>
             <div class="mb-3">
-              <label for="SignupName" class="form-label">Name</label>
+              <label for="SignupName" class="form-label">이름</label>
               <input type="text" class="form-control" id="SignupName" name="name">
             </div>
           </form>
-          <button class="btn btn-danger" onclick="signup()">SignUp</button>
+          <button class="btn btn-danger" onclick="signup()" style="width:100%">SignUp</button>
         </div>
       </div>
     </div>
