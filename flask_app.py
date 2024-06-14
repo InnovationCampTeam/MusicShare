@@ -4,6 +4,7 @@ app = Flask(__name__)
 import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import delete,ForeignKey
+from sqlalchemy.orm import relationship
 from hashlib import md5
 import re
 
@@ -36,23 +37,26 @@ class User(db.Model):
 class Playlist(db.Model):  
     __tablename__ = 'Playlist'  
     plid = db.Column(db.Integer, primary_key=True,autoincrement=True)
-    id = db.Column(db.String(30),ForeignKey('User.id'))
+    id = db.Column(db.String(30),ForeignKey('User.id',ondelete='CASCADE'))
     name = db.Column(db.String(100), nullable=False)
     img = db.Column(db.String(100), nullable=False)
+    user = db.relationship("User",backref=db.backref('Playlist', cascade='delete'))
+
 
 class Music(db.Model):    
     __tablename__ = 'Music' 
     mid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    plid = db.Column(db.Integer,ForeignKey('Playlist.plid'))
+    plid = db.Column(db.Integer,ForeignKey('Playlist.plid',ondelete='CASCADE'))
     title = db.Column(db.String(100), nullable=False)
     artist = db.Column(db.String(100), nullable=False)
     url = db.Column(db.String(100), nullable=False)
+    playlist = db.relationship("Playlist",backref=db.backref('Music', cascade='delete'))
 
 class Share(db.Model):    
     __tablename__ = 'Share'     
     index = db.Column(db.Integer,primary_key=True,autoincrement=True)
-    id = db.Column(db.String(30),ForeignKey('User.id'))
-    shareid = db.Column(db.String(30),ForeignKey('User.id'))
+    id = db.Column(db.String(30),ForeignKey('User.id',ondelete='CASCADE'))
+    shareid = db.Column(db.String(30),ForeignKey('User.id',ondelete='CASCADE'))
 
 
 
