@@ -312,8 +312,12 @@ def musics(plid):
     if "id" in session:
         playlist = Playlist.query.filter_by(id=session['id']).first()
         musics = Music.query.filter_by(plid=plid).all()    
-        create_url = url_for('musics_create', plid=plid)
-        return render_template('musics.html', musics=musics,playlist=playlist,create_url=create_url)
+        create_url = url_for('musics_create', plid=plid)  
+        addURL = url_for('addFriend')
+        searchURL = url_for('searchUser')
+        loadURL = url_for('loadFriend')
+        deleteURL = url_for('deleteFriend')
+        return render_template('musics.html', musics=musics,playlist=playlist,create_url=create_url,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
     else :         
         return redirect(url_for('playlists'))
     
