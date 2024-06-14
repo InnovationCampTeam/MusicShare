@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layout.html" %}
  {% block style %}
 {% endblock %} 
@@ -131,6 +132,140 @@
 {% endblock %}
  {% block script %} 
  <script type="text/javascript">
+=======
+{% extends "layout.html" %} {% block style %} {% endblock %} {% block content %}
+<main>
+  <section style="max-width: 1320px; width: 90%; margin: 0 auto">
+    {% if playlist.img %}
+    <div style="height: 300px; overflow: hidden">
+      <img
+        src="{{ playlist.img }}"
+        class="img-fluid"
+        alt="플레이리스트 커버 이미지"
+        style="object-fit: cover; width: 100%; height: 100%"
+      />
+    </div>
+    {% endif %}
+    <button
+      type="button"
+      onclick="javascript:history.back()"
+      class="btn"
+      style="font-size: 18px"
+    >
+      ← 뒤로가기
+    </button>
+    <h1 class="card-title">{{ playlist.name }}</h1>
+    <div class="d-flex flex-row-reverse">
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="margin-bottom: 20px"
+        data-bs-toggle="modal"
+        data-bs-target="#Modal"
+      >
+        음악을 추가해보세요
+      </button>
+    </div>
+    <div>
+      <table class="table table-dark table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">앨범</th>
+            <th scope="col">타이틀</th>
+            <th scope="col">가수 이름</th>
+            <th scope="col">동작</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for music in musics %}
+          <tr>
+            <th scope="row">{{ music.mid }}</th>
+            <td>
+              <img
+                src="{{ music.url }}"
+                alt="앨범 자켓"
+                style="width: 40px; height: 40px; object-fit: cover"
+              />
+            </td>
+            <td>{{ music.title }}</td>
+            <td>{{ music.artist }}</td>
+            <td>
+              <form
+                action="{{ url_for('musics_delete', plid=playlist.plid, mid=music.mid) }}"
+                method="post"
+              >
+                <button type="submit" class="btn btn-danger">삭제</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 음악 추가 모달 -->
+  <div
+    class="modal fade"
+    id="Modal"
+    tabindex="-1"
+    aria-labelledby="ModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">음악 등록하기</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form method="GET" id="createMusicForm">
+            <div class="mb-3">
+              <label for="musicTitle" class="form-label">제목</label>
+              <input
+                type="text"
+                class="form-control"
+                id="musicTitle"
+                name="musicTitle"
+                placeholder="제목을 입력하세요."
+              />
+            </div>
+            <div class="mb-3">
+              <label for="musicArtist" class="form-label">가수 이름</label>
+              <input
+                type="text"
+                class="form-control"
+                id="musicArtist"
+                name="musicArtist"
+                placeholder="가수 이름을 입력하세요."
+              />
+            </div>
+            <div class="mb-3">
+              <label for="musicAlbum" class="form-label">앨범 자켓</label>
+              <input
+                type="text"
+                class="form-control"
+                id="musicAlbum"
+                name="musicAlbum"
+                placeholder="앨범 자켓 이미지를 입력하세요."
+              />
+            </div>
+            <button type="button" onclick="musicCreate()">등록하기</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %} {% block script %}
+<script type="text/javascript">
+>>>>>>> acc0ba3b4353418285de20967a83a81dfaa78178
   // 음악 생성하기
   var createUrl = "{{ create_url }}";
   function musicCreate() {
@@ -152,4 +287,8 @@
     });
   }
 </script>
+<<<<<<< HEAD
  {% endblock %}
+=======
+{% endblock %}
+>>>>>>> acc0ba3b4353418285de20967a83a81dfaa78178

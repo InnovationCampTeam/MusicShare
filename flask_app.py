@@ -328,7 +328,11 @@ def musics(plid):
     if "id" in session:
         playlist = Playlist.query.filter_by(plid=plid).first()
         musics = Music.query.filter_by(plid=plid).all()    
+<<<<<<< HEAD
         create_url = url_for('musics_create', plid=plid)
+=======
+        create_url = url_for('musics_create', plid=plid)  
+>>>>>>> acc0ba3b4353418285de20967a83a81dfaa78178
         addURL = url_for('addFriend')
         searchURL = url_for('searchUser')
         loadURL = url_for('loadFriend')
