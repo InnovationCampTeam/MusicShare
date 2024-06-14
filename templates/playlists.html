@@ -86,8 +86,8 @@
   />
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">
+      <div class="col mx-auto">
+        <h1 class="fw-light" style="width:100%;">
           <font style="vertical-align: inherit">
             <font
               style="vertical-align: inherit; font-size: 5vh; font-weight: 700"
@@ -112,16 +112,6 @@
           >
             Playlist 추가
           </button>
-          <a
-            href="https://getbootstrap.kr/docs/5.3/examples/album-rtl/#"
-            class="btn btn-primary my-2"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-          >
-            <font style="vertical-align: inherit">
-              <font style="vertical-align: inherit">Playlist 추가</font>
-            </font>
-          </a>
         </p>
       </div>
     </div>
@@ -202,6 +192,7 @@
                 object-fit="cover"
                 src="{{ playlist.img }}"
                 alt="..."
+                style="object-fit: cover;"
               />
               <div class="card-body">
                 <p class="card-text">
@@ -236,11 +227,6 @@
                       </button>
                     </form>
                   </div>
-                  <small class="text-body-secondary">
-                    <font style="vertical-align: inherit">
-                      <font style="vertical-align: inherit">9분</font>
-                    </font>
-                  </small>
                 </div>
               </div></a
             >
@@ -250,31 +236,7 @@
       </div>
       {% else %}
       <div class="col">
-        <div class="card shadow-sm">
-          <svg
-            class="bd-placeholder-img card-img-top"
-            width="100%"
-            height="225"
-            xmlns="http://www.w3.org/2000/svg"
-            role="img"
-            aria-label="자리표시자: 썸네일"
-            preserveaspectratio="xMidYMid slice"
-            focusable="false"
-          >
-            <title>Placeholder</title>
-            <rect width="100%" height="100%" fill="#55595c"></rect>
-            <text x="50%" y="50%" fill="#eceeef" dy=".3em">
-              playlist 추가 버튼을 눌러, 나만의 "Playlist"를 만들어 보세요!
-            </text>
-          </svg>
-          <div class="card-body">
-            <p class="card-text">
-              <font style="vertical-align: inherit">
-                <font style="vertical-align: inherit">My Music Playlist</font>
-              </font>
-            </p>
-          </div>
-        </div>
+        <p style="font-size: 4vh; font-weight: 700;"  align='center'>지금 바로 Playlist를 추가해보세요!</p>
       </div>
       {% endif %}
     </div>

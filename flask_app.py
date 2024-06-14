@@ -165,7 +165,7 @@ def changePassword():
                     # 비밀번호 변경 후 DB에 적용
                     user.password = newpassword                    
                     db.session.commit()
-                    return jsonify(result = "success",redirect='/playlists/'+session['id'])
+                    return jsonify(result = "success",redirect='/playlists/')
                 else:
                     return jsonify(result = "fail",message="적절하지 않은 비밀번호입니다.")    
         else :
@@ -179,7 +179,7 @@ def changeName():
     user.username = newname
     db.session.commit()
     session['username'] = newname
-    return jsonify(result = "success",redirect='/playlists/'+session['id'])
+    return jsonify(result = "success",redirect='/playlists/')
 
 # 이승현 - 회원 탈퇴 : 회원 정보 삭제
 @app.route("/withdraw/",methods=['POST'])
@@ -221,13 +221,29 @@ def friendPlaylist(id):
         loadURL = url_for('loadFriend')
         deleteURL = url_for('deleteFriend')
         friend = db.session.query(User).filter_by(id=id).first()
-        playlists = User.query.filter_by(id=id).all()    
-        return render_template('friends_playlists.html',friend=friend,playlists=playlists,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
+        playlists = Playlist.query.filter_by(id=id).all()    
+        print(playlists)
+        return render_template('friend_playlists.html',friend=friend,playlists=playlists,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
     else :
         # 친구 관계 아님
         flash('현재 친구로 추가되지 않은 사용자입니다.')
         return  redirect(url_for('playlists'))
-
+    
+# 이승현 - 음악 페이지 : 특정 플레이리스트에 포함된 음악 목록을 불러옴
+@app.route("/friends/playlist/<plid>/music/")
+def friend_musics(plid):
+    if "id" in session:
+        playlist = Playlist.query.filter_by(plid=plid).first()
+        musics = Music.query.filter_by(plid=plid).all()    
+        create_url = url_for('musics_create', plid=plid)
+        addURL = url_for('addFriend')
+        searchURL = url_for('searchUser')
+        loadURL = url_for('loadFriend')
+        deleteURL = url_for('deleteFriend')
+        return render_template('friend_music.html', musics=musics,playlist=playlist,create_url=create_url,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
+    else :         
+        return redirect(url_for('playlists'))
+    
 # 이승현 - 친구로 추가하기 - 대상에게 나의 플레이리스트에 대한 접근을 허용합니다.
 @app.route("/friends/add/",methods=["GET"])
 def addFriend(): 
@@ -310,10 +326,14 @@ def playlist_edit(plid):
 def musics(plid):
     print("접근!!!")
     if "id" in session:
-        playlist = Playlist.query.filter_by(id=session['id']).first()
+        playlist = Playlist.query.filter_by(plid=plid).first()
         musics = Music.query.filter_by(plid=plid).all()    
         create_url = url_for('musics_create', plid=plid)
-        return render_template('musics.html', musics=musics,playlist=playlist,create_url=create_url)
+        addURL = url_for('addFriend')
+        searchURL = url_for('searchUser')
+        loadURL = url_for('loadFriend')
+        deleteURL = url_for('deleteFriend')
+        return render_template('musics.html', musics=musics,playlist=playlist,create_url=create_url,addURL=addURL,searchURL=searchURL,loadURL=loadURL,deleteURL=deleteURL)
     else :         
         return redirect(url_for('playlists'))
     

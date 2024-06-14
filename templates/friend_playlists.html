@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block style %}
+{% endblock %}
+{% block content %}
+<!-- Content -->
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col mx-auto">
+        <h1 class="fw-light" style="width:100%;">
+          <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit; ">{{friend.username}}님의 플레이 리스트에 오신 것을 환영합니다.</font>
+          </font>
+        </h1>
+        <p class="lead text-body-secondary">
+          <font style="vertical-align: inherit;">
+            <font style="vertical-align: inherit;">어서 와서 구경하세요!.</font>
+          </font>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-body-tertiary">
+    <div class="container">
+      {% if playlists %}
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for playlist in playlists %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <a href="{{ url_for('friend_musics', plid=playlist.plid) }}">
+              <img
+                class="bd-placeholder-img card-img-top"
+                width="100%"
+                height="225"
+                object-fit="cover"
+                src="{{ playlist.img }}"
+                alt="..."                
+                style="object-fit: cover;"
+              />
+              <div class="card-body">
+                <p class="card-text">
+                  <font style="vertical-align: inherit">
+                    <font style="vertical-align: inherit"
+                      >{{ playlist.name }}</font
+                    >
+                  </font>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                  </div>
+                  <small class="text-body-secondary">
+                  </small>
+                </div>
+              </div></a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="col">
+        <p style="font-size: 4vh; font-weight: 700;"  align='center'>생성한 Playlist가 없습니다.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}   
+{% block script %}
+<!-- 자바스크립트 -->
+{% endblock %}   

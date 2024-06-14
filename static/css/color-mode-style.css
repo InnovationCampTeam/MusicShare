@@ -10,6 +10,7 @@
   cursor: pointer;
   padding: 5px;
   width: 80px;
+  z-index: 9999;
 }
 
 .theme-toggle .toggle-circle {
