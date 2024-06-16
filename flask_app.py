@@ -295,8 +295,8 @@ def playlist_create():
     playlist_name_receive = request.args.get("playlist_name")
     img_receive = request.args.get("img_url")
   #  데이터 DB에 저장
-    my_playlist = Playlist(name=playlist_name_receive, img=img_receive, id =session['id'])
-    db.session.add(my_playlist)
+    playlist = Playlist(name=playlist_name_receive, img=img_receive, id =session['id'])
+    db.session.add(playlist)
     db.session.commit()
     return redirect(url_for('playlists'))
 
@@ -310,16 +310,17 @@ def playlist_delete(plid):
     return redirect(url_for('playlists'))
 
 # 류영찬 - Playlist 수정하기
-@app.route('/playlists/edit/<int:plid>', methods=['GET', 'POST'])
-def playlist_edit(plid):
-    playlist = Playlist.query.get(plid)
-    if request.method == 'POST':
-        playlist.name = request.form.get('playlist_name')
-        playlist.img = request.form.get('img_url')
-        db.session.commit()
-        return redirect(url_for('playlists'))
-    
-    return render_template('playlists_edit.html', playlist=playlist)
+@app.route('/playlists/edit', methods=['POST'])
+def playlist_edit():    
+    img_receive = request.form.get("img_url")    
+    plid = request.form.get("editplid")    
+    playlist_name_receive = request.form.get("playlist_name")    
+
+    playlist = db.session.query(Playlist).filter_by(plid=plid).first()
+    playlist.name = playlist_name_receive
+    playlist.img = img_receive
+    db.session.commit()    
+    return jsonify(result = "success") 
 
 # 권지민 - 음악 페이지 : 특정 플레이리스트에 포함된 음악 목록을 불러옴
 @app.route("/playlists/<plid>/")
@@ -328,11 +329,7 @@ def musics(plid):
     if "id" in session:
         playlist = Playlist.query.filter_by(plid=plid).first()
         musics = Music.query.filter_by(plid=plid).all()    
-<<<<<<< HEAD
-        create_url = url_for('musics_create', plid=plid)
-=======
         create_url = url_for('musics_create', plid=plid)  
->>>>>>> acc0ba3b4353418285de20967a83a81dfaa78178
         addURL = url_for('addFriend')
         searchURL = url_for('searchUser')
         loadURL = url_for('loadFriend')

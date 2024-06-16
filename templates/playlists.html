@@ -1,332 +1,248 @@
-{% extends "layout.html" %} {% block style %}
-<style>
-  .bd-placeholder-img {
-    font-size: 1.125rem;
-    text-anchor: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
-
-  @media (min-width: 768px) {
-    .bd-placeholder-img-lg {
-      font-size: 3.5rem;
+{% extends "layout.html" %}
+{% block style %}
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
     }
-  }
 
-  .b-example-divider {
-    width: 100%;
-    height: 3rem;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: solid rgba(0, 0, 0, 0.15);
-    border-width: 1px 0;
-    box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
-      inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
-  }
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
 
-  .b-example-vr {
-    flex-shrink: 0;
-    width: 1.5rem;
-    height: 100vh;
-  }
+    .b-example-divider {
+      width: 100%;
+      height: 3rem;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: solid rgba(0, 0, 0, 0.15);
+      border-width: 1px 0;
+      box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+    }
 
-  .bi {
-    vertical-align: -0.125em;
-    fill: currentColor;
-  }
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
 
-  .nav-scroller {
-    position: relative;
-    z-index: 2;
-    height: 2.75rem;
-    overflow-y: hidden;
-  }
+    .bi {
+      vertical-align: -0.125em;
+      fill: currentColor;
+    }
 
-  .nav-scroller .nav {
-    display: flex;
-    flex-wrap: nowrap;
-    padding-bottom: 1rem;
-    margin-top: -1px;
-    overflow-x: auto;
-    text-align: center;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
 
-  .btn-bd-primary {
-    --bd-violet-bg: #712cf9;
-    --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
 
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: var(--bs-white);
-    --bs-btn-bg: var(--bd-violet-bg);
-    --bs-btn-border-color: var(--bd-violet-bg);
-    --bs-btn-hover-color: var(--bs-white);
-    --bs-btn-hover-bg: #6528e0;
-    --bs-btn-hover-border-color: #6528e0;
-    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-    --bs-btn-active-color: var(--bs-btn-hover-color);
-    --bs-btn-active-bg: #5a23c8;
-    --bs-btn-active-border-color: #5a23c8;
-  }
+    .btn-bd-primary {
+      --bd-violet-bg: #712cf9;
+      --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
 
-  .bd-mode-toggle {
-    z-index: 1500;
-  }
+      --bs-btn-font-weight: 600;
+      --bs-btn-color: var(--bs-white);
+      --bs-btn-bg: var(--bd-violet-bg);
+      --bs-btn-border-color: var(--bd-violet-bg);
+      --bs-btn-hover-color: var(--bs-white);
+      --bs-btn-hover-bg: #6528e0;
+      --bs-btn-hover-border-color: #6528e0;
+      --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+      --bs-btn-active-color: var(--bs-btn-hover-color);
+      --bs-btn-active-bg: #5a23c8;
+      --bs-btn-active-border-color: #5a23c8;
+    }
 
-  .bd-mode-toggle .dropdown-menu .active .bi {
-    display: block !important;
-  }
-</style>
-{% endblock %} {% block content %}
-<main>
-  <img
-    src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=200"
-    style="width: 100vw; position: absolute; z-index: -99"
-  />
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col mx-auto">
-        <h1 class="fw-light" style="width:100%;">
-          <font style="vertical-align: inherit">
-            <font
-              style="vertical-align: inherit; font-size: 5vh; font-weight: 700"
-              >{{session['username']}}님 반갑습니다.</font
-            >
-          </font>
-        </h1>
-        <p class="lead text-body-secondary">
-          <font style="vertical-align: inherit">
-            <font
-              style="vertical-align: inherit; font-size: 2vh; font-weight: 700"
-              >안녕하세요! 뮤직 쉐어에 오신 것을 환영합니다.</font
-            >
-          </font>
-        </p>
-        <p>
-          <button
-            type="button"
-            class="btn btn-light"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-          >
-            Playlist 추가
-          </button>
-        </p>
-      </div>
-    </div>
-  </section>
-  <!-- Modal Playlist 추가 -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">My Playlist</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+    .bd-mode-toggle {
+      z-index: 1500;
+    }
+
+    .bd-mode-toggle .dropdown-menu .active .bi {
+      display: block !important;
+    }
+  </style>
+{% endblock %}
+{% block content %}
+  <main>
+    <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=200" style="width: 100vw; position: absolute; z-index: -99"/>
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col mx-auto">
+          <h1 class="fw-light" style="width:100%;">
+            <font style="vertical-align: inherit">
+              <font style="vertical-align: inherit; font-size: 5vh; font-weight: 700">{{session['username']}}님 반갑습니다.</font>
+            </font>
+          </h1>
+          <p class="lead text-body-secondary">
+            <font style="vertical-align: inherit">
+              {% if session['userText'] %}
+              <font style="vertical-align: inherit; font-size: 2vh; font-weight: 700">{{session['userText']}}</font>
+              {% else %}
+              <font style="vertical-align: inherit; font-size: 2vh; font-weight: 700">지금 인사말을 추가해보세요!</font>
+              {% endif %}             
+            </font>
+          </p>
+          <p>
+            <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Playlist 추가
+            </button>
+          </p>
         </div>
-        <div class="modal-body">
-          <div class="modal-body">
-            <form action="{{ url_for('playlist_create') }}" method="GET">
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label"
-                  >Playlist 이름</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  name="playlist_name"
-                />
-                <div id="emailHelp" class="form-text">
-                  Playlist의 제목을 적어주세요!
-                </div>
-              </div>
-              <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label"
-                  >커버 이미지</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="exampleInputPassword1"
-                  name="img_url"
-                />
-                <div id="emailHelp" class="form-text">
-                  Playlist의 배경 이미지 주소를 적어주세요!
-                </div>
-              </div>
-              <button type="submit" class="btn btn-outline-primary">
-                만들기
-              </button>
-            </form>
+      </div>
+    </section>
+    <!-- Modal Playlist 추가 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">My Playlist</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="album py-5 bg-body-tertiary">
-    <div class="container">
-      {% if playlists %}
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for playlist in playlists %}
-        <div class="col">
-          <div class="card shadow-sm">
-            <a href="{{ url_for('musics', plid=playlist.plid) }}">
-              <img
-                class="bd-placeholder-img card-img-top"
-                width="100%"
-                height="225"
-                object-fit="cover"
-                src="{{ playlist.img }}"
-                alt="..."
-                style="object-fit: cover;"
-              />
-              <div class="card-body">
-                <p class="card-text">
-                  <font style="vertical-align: inherit">
-                    <font style="vertical-align: inherit"
-                      >{{ playlist.name }}</font
-                    >
-                  </font>
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <a
-                      href="{{ url_for('playlist_edit', plid=playlist.plid) }}"
-                      class="btn btn-sm btn-outline-secondary"
-                    >
-                      <font style="vertical-align: inherit">
-                        <font style="vertical-align: inherit">수정</font>
-                      </font>
-                    </a>
-                    <form
-                      action="{{ url_for('playlist_delete', plid=playlist.plid) }}"
-                      method="POST"
-                      style="display: inline"
-                    >
-                      <button
-                        type="submit"
-                        class="btn btn-sm btn-outline-secondary"
-                      >
-                        <font style="vertical-align: inherit">
-                          <font style="vertical-align: inherit">삭제</font>
-                        </font>
-                      </button>
-                    </form>
+          <div class="modal-body">
+            <div class="modal-body">
+              <form action="{{ url_for('playlist_create') }}" method="GET">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Playlist 이름</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="playlist_name"/>
+                  <div id="emailHelp" class="form-text">
+                    Playlist의 제목을 적어주세요!
                   </div>
                 </div>
-              </div></a
-            >
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">커버 이미지</label>
+                  <input type="text" class="form-control" id="exampleInputPassword1" name="img_url"/>
+                  <div id="emailHelp" class="form-text">
+                    Playlist의 배경 이미지 주소를 적어주세요!
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-outline-primary">
+                  만들기
+                </button>
+              </form>
+            </div>
           </div>
         </div>
-        {% endfor %}
-      </div>
-      {% else %}
-      <div class="col">
-        <p style="font-size: 4vh; font-weight: 700;"  align='center'>지금 바로 Playlist를 추가해보세요!</p>
-      </div>
-      {% endif %}
-    </div>
-  </div>
-
-  <!-- 이승현 : 회원 정보 수정 모달 -->
-  <div
-    class="modal fade"
-    id="updateModal"
-    tabindex="-1"
-    aria-labelledby="ModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <ul class="nav nav-tabs justify-content-center">
-            <li class="nav-item">
-              <a id="userNav" class="nav-link" onclick="changePassword()"
-                >비밀번호 변경</a
-              >
-            </li>
-            <li class="nav-item">
-              <a id="userNav" class="nav-link" onclick="changeName()"
-                >이름 변경</a
-              >
-            </li>
-            <li class="nav-item">
-              <a id="userNav" class="nav-link" onclick="withdraw()"
-                >회원 탈퇴</a
-              >
-            </li>
-          </ul>
-          <form method="POST" id="userModal"></form>
-          <button
-            id="userButton"
-            type="button"
-            class="btn btn-danger"
-            onclick="signup()"
-          >
-            확인
-          </button>
-        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 사용자 검색 및 친구 추가 모달 -->
-  <div
-    class="modal fade"
-    id="addFriendModal"
-    tabindex="-1"
-    aria-labelledby="ModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="saerchInput"
-              name="id"
-              placeholder="ID"
-            />
-            <button class="btn btn-danger" onclick="search()">Search</button>
+    <div class="album py-5 bg-body-tertiary">
+      <div class="container">
+        {% if playlists %}
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for playlist in playlists %}
+              <div class="col">
+                <div class="card shadow-sm">
+                  <a href="{{ url_for('musics', plid=playlist.plid) }}">
+                    <img class="bd-placeholder-img card-img-top" width="100%" height="225" object-fit="cover" src="{{playlist.img}}" alt="..." style="object-fit: cover;"/>
+                    <div class="card-body">
+                      <p class="card-text">
+                        <font style="vertical-align: inherit">
+                          <font style="vertical-align: inherit">{{ playlist.name }}</font>
+                        </font>
+                      </p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                          <a  class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal"  onclick="SetParamModal('{{playlist.plid}}','{{playlist.name}}','{{playlist.img}}')">
+                            <font style="vertical-align: inherit">
+                              <font style="vertical-align: inherit">수정</font>
+                            </font>
+                          </a>
+                          <form action="{{ url_for('playlist_delete', plid=playlist.plid) }}" method="POST" style="display: inline">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                              <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">삭제</font>
+                              </font>
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
           </div>
-          <div id="result"></div>
+        {% else %}
+          <div class="col">
+            <p style="font-size: 4vh; font-weight: 700;" align='center'>지금 바로 Playlist를 추가해보세요!</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- 이승현 : 회원 정보 수정 모달 -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="ModalLabel">Playlist 수정</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" id="editForm">
+              <div class="mb-3">
+                <label for="playlist_name" class="form-label">Playlist 이름</label>
+                <input type="text" class="form-control" id="playlist_name" name="playlist_name">
+              </div>
+              <div class="mb-3">
+                <label for="img_url" class="form-label">커버 이미지</label>
+                <input type="text" class="form-control" id="img_url" name="img_url">
+              </div>        
+              <input type="hidden" class="form-control" id="editplid" name="editplid">    
+            </form>
+            <button type="button" class="btn btn-danger" onclick="editPlaylist()">확인</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</main>
-{% endblock %} {% block script %} {% endblock %}
+  </main>
+{% endblock %}
+{% block script %}
+<script>
+  editplid = ""
+  function SetParamModal(plid,name,img){
+    $("#editplid").val(plid);
+    $("#playlist_name").val(name)
+    $("#img_url").val(img)
+  }
+
+  function editPlaylist() {
+    $.ajax({
+      url: "/playlists/edit", // 요기에
+      type: 'POST',
+      data: $("#editForm").serialize(),
+      dataType: 'JSON',
+      success: function (data) {
+        if (data.result == "success") {
+          alert("Playlist 정보가 변경되었습니다.");
+          location.reload(true);
+        } else {
+          alert(data.message);
+        }
+      },
+      error: function (xhr, status) {
+        alert(xhr + " : " + status);
+      }
+    });
+  }
+</script>
+
+
+{% endblock %}
