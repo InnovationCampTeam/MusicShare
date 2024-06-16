@@ -1,35 +1,18 @@
 {% extends "layout.html" %} {% block style %} {% endblock %} {% block content %}
 <main>
-  <section style="max-width: 1320px; width: 90%; margin: 0 auto">
-    {% if playlist.img %}
-    <div style="height: 300px; overflow: hidden">
-      <img
-        src="{{ playlist.img }}"
-        class="img-fluid"
-        alt="플레이리스트 커버 이미지"
-        style="object-fit: cover; width: 100%; height: 100%"
-      />
-    </div>
-    {% endif %}
-    <button
-      type="button"
-      onclick="javascript:history.back()"
-      class="btn"
-      style="font-size: 18px"
-    >
-      ← 뒤로가기
-    </button>
-    <h1 class="card-title">{{ playlist.name }}</h1>
+  {% if playlist%}
+  <section style="max-width: 1320px; width: 90%; margin: 0 auto; ">
+
+    <div style="height: 300px; position:relative;">
+      <img src="{{ playlist.img }}" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;"/>
+      <button type="button" onclick="javascript:history.back()" class="btn btn-danger" style="font-size: 18px; position:absolute; top:2%; left:1%"><i class="bi bi-backspace-fill"></i></button>
+      <button type="button" class="btn btn-danger" style="margin-bottom: 20px; position:absolute; top:85%; right:1%" data-bs-toggle="modal" data-bs-target="#Modal">Add Music</button>
+    </div>    
+    <h1 class="card-title p-2" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" >{{ playlist.name }}</h1>
+    
+
     <div class="d-flex flex-row-reverse">
-      <button
-        type="button"
-        class="btn btn-primary"
-        style="margin-bottom: 20px"
-        data-bs-toggle="modal"
-        data-bs-target="#Modal"
-      >
-        음악을 추가해보세요
-      </button>
+      
     </div>
     <div>
       <table class="table table-dark table-hover">
@@ -68,7 +51,8 @@
         </tbody>
       </table>
     </div>
-  </section>
+  </section>  
+  {% endif %}
 
   <!-- 음악 추가 모달 -->
   <div

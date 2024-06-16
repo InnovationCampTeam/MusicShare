@@ -114,3 +114,8 @@ body{
 }
 
 .item:hover .del-button {opacity:1; display: block; top:10px;}
+
+#playlist_item:hover .div{
+  transform: scale(1.05);
+  transition-duration: 0.5s; 
+}

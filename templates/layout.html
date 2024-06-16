@@ -50,13 +50,13 @@
     </div>
     <!-- 상단 메뉴바 / 친구 목록 , 로그인, 사용자 정보 설정에 대한 설정 -->
     <header data-bs-theme="dark">
-      <div class="collapse text-bg-dark" id="navbarHeader">
+      <div class="collapse text-bg-dark" id="navbarHeader" style="height:auto;">
         <div class="container">
           <div class="row pt-2">
             <div class="col">
               <div class="hstack gap-1">
                 <div class="p-2">
-                  <font style="font-size: 25px;">친구 목록</font>
+                  <font style="font-size: 25px;">Friends</font>
                 </div>
                 <div class="p-2">
                   <a class="col" type="button" data-bs-toggle="modal" data-bs-target="#addFriendModal" style="font-size: 25px;">
@@ -64,16 +64,20 @@
                   </a>
                 </div>
               </div>   
-              <div class="row">   
+              <div class="row" style="height:12vh">  
+                <!-- 왼쪽 버튼 -->
                 <div class="col p-0" onclick="scrollBack()" style="display:grid; align-items:center;">    
                   <i class="bi bi-caret-left-fill" style="font-size:40px"></i>
-                </div>           
+                </div>         
+
+              <!-- 친구 목록 -->
                 <div class="items col-11 p-0" id="friendsList"></div>
+
+                <!-- 오른쪽 버튼 -->
                 <div class="col p-0" onclick="scrollForward()" style="display:grid; align-items:center;">
                   <i class="bi bi-caret-right-fill" style="font-size:40px"></i>
                 </div>
               </div>           
-              <!-- 친구 목록 -->
             </div>
           </div>
         </div>
@@ -104,25 +108,28 @@
     <!-- 이승현 : 회원 정보 수정 모달 -->
     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="width:120%">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="ModalLabel">회원 정보 관리</h1>
+            <h1 class="modal-title fs-5" id="ModalLabel">Account Information</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <ul class="nav nav-tabs justify-content-center">
               <li class="nav-item">
-                <a id="userNav" class="nav-link" onclick="changePassword()">비밀번호 변경</a>
+                <a id="changeImagedNav" class="nav-link p-0 m-0" onclick="changeImage()" style="font-size:13px">Change User Image</a>
               </li>
               <li class="nav-item">
-                <a id="userNav" class="nav-link" onclick="changeName()">이름 변경</a>
+                <a id="changePasswordNav" class="nav-link" onclick="changePassword()" style="font-size:13px">Change Password</a>
               </li>
               <li class="nav-item">
-                <a id="userNav" class="nav-link" onclick="withdraw()">회원 탈퇴</a>
+                <a id="changeNamedNav" class="nav-link" onclick="changeName()" style="font-size:13px">Change Name</a>
+              </li>
+              <li class="nav-item">
+                <a id="withdrawNav" class="nav-link" onclick="withdraw()" style="font-size:13px">Withdrawal</a>
               </li>
             </ul>
             <form class="p-2" method="POST" id="userModal" style="padding:10px" ></form>
-            <button id="userButton" type="button" class="btn btn-danger" onclick="signup()" style="width:100%">확인</button>
+            <button id="userButton" type="button" class="btn btn-danger" onclick="signup()" style="width:100%">Confirm</button>
           </div>
         </div>
       </div>
@@ -133,7 +140,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="ModalLabel">검색</h1>
+            <h1 class="modal-title fs-5" id="ModalLabel">Search by ID</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -200,48 +207,92 @@
       var usermodal = $("#userModal");
       var button = $("#userButton");
       var result = $("#result")      
+      var navlinks = $("#userNav")
       //____________________________모달 선택에 따른 형태 변경을 위한 기능_________________________________
       // 이승현 : HTML 요소 생성하는 기능
       function inputHTML(id, type, name, text) {
         return '<div class="mb-3"><label for="' + id + '" class="form-label">' + text + '</label>' + '<input type="' + type + '" class="form-control" id="' + id + '" aria-describedby="' + id + '" name="' + name + '">'
-      }    
-      // 이승현 : 암호 변경으로 모드 변경
-      function changePassword() {
-        console.log("changePassword!!")
+      }   
+      
+      function changeImage() {
+        $("#changeImagedNav").attr("class","nav-link active ");
+        $("#changePasswordNav").attr("class","nav-link");
+        $("#changeNamedNav").attr("class","nav-link");
+        $("#withdrawNav").attr("class","nav-link");
         usermodal.fadeOut(200, function () {
           usermodal.empty();
-          usermodal.innerHTML = "";
-          usermodal.append(inputHTML("exampleInputPassword", "password", "password", "현재 Password"));
-          usermodal.append(inputHTML("exampleInputNewPassword", "password", "newpassword", "새로운 Password"));
-          usermodal.append(inputHTML("exampleInputNewPasswordCheck", "password", "newpasswordCheck", "새로운 Password 확인"));
+          usermodal.innerHTML = "";    
+          usermodal.append(inputHTML("exampleInputURL", "text", "url", "New Image url"));
+          usermodal.fadeIn(200);
+        });
+        button.attr("onclick", "changeImage_Post()");
+      }    
+
+      // 이승현 : 암호 변경으로 모드 변경
+      function changePassword() {
+        $("#changeImagedNav").attr("class","nav-link ");
+        $("#changePasswordNav").attr("class","nav-link active");
+        $("#changeNamedNav").attr("class","nav-link");
+        $("#withdrawNav").attr("class","nav-link");
+        usermodal.fadeOut(200, function () {
+          usermodal.empty();
+          usermodal.innerHTML = "";    
+          usermodal.append(inputHTML("exampleInputPassword", "password", "password", "Current Password"));
+          usermodal.append(inputHTML("exampleInputNewPassword", "password", "newpassword", "New Password"));
+          usermodal.append(inputHTML("exampleInputNewPasswordCheck", "password", "newpasswordCheck", "Check Password"));
           usermodal.fadeIn(200);
         });
         button.attr("onclick", "changePassword_Post()");
       }    
       // 이승현 : 이름 변경으로 모드 변경
       function changeName() {
-        console.log("changeName!!")
+        $("#changeImagedNav").attr("class","nav-link ");
+        $("#changePasswordNav").attr("class","nav-link ");
+        $("#changeNamedNav").attr("class","nav-link active");
+        $("#withdrawNav").attr("class","nav-link");
         usermodal.fadeOut(200, function () {
           usermodal.empty();
           usermodal.innerHTML = "";
-          usermodal.append(inputHTML("exampleInputNewName", "newname", "newname", "새로운 이름"));
+          usermodal.append(inputHTML("exampleInputNewName", "text", "newname", "New name"));
           usermodal.fadeIn(200);
         });
         button.attr("onclick", "changeName_Post()");
       }    
       // 이승현 : 탈퇴로 변경
-      function withdraw() {
-        console.log("withdraw!!")
+      function withdraw() {        
+        $("#changeImagedNav").attr("class","nav-link ");
+        $("#changePasswordNav").attr("class","nav-link ");
+        $("#changeNamedNav").attr("class","nav-link");
+        $("#withdrawNav").attr("class","nav-link active");
         usermodal.fadeOut(200, function () {
           usermodal.empty();
           usermodal.innerHTML = "";
-          usermodal.append("<p>모든 정보가 삭제됩니다.</p>");
+          usermodal.append("<p>All your information will be deleted.</p>");
           usermodal.fadeIn(200);
         });
         button.attr("onclick", "withdraw_Post()");
       }
     
       //____________________________모달 내부에서 기능을 실행하기 위한 요청 함수_________________________________
+      function changeImage_Post(){
+        $.ajax({
+          url: {{url_for('changeImage')}}, // 요기에
+          type: 'POST',
+          data: $("#userModal").serialize(),
+          dataType: 'JSON',
+          success: function (data) {
+            if (data.result == "success") {
+              window.location.href = data.redirect;
+            } else {
+              alert(data.message);
+            }
+          },
+          error: function (xhr, status) {
+            alert(xhr + " : " + status);
+          }
+        });
+      }
+
       // 이승현 : 암호 변경 요청
       function changePassword_Post() {
         $.ajax({
@@ -304,28 +355,37 @@
       var searchURL = "{{searchURL}}";
       // 로그인 값을 받아 전달하는 기능
       function search() {
-        $.ajax({
-          url: searchURL,
-          type: 'GET',
-          data: {
-            input: $("#saerchInput").val()
-          },
-          dataType: 'JSON',
-          success: function (data) {
-            if (data.result == "success") {
-              result.empty();
-              for (var i = 0; i < data.users.length; i++) {
-                user = data.users[i]
-                result.append(userHTML(user.id, user.username))
+        if($("#saerchInput").val().length < 4 ){
+          alert("Please input at least 4 characters.");
+        }else{
+          $.ajax({
+            url: searchURL,
+            type: 'GET',
+            data: {
+              input: $("#saerchInput").val()
+            },
+            dataType: 'JSON',
+            success: function (data) {
+              if (data.result == "success") {
+                result.empty();
+                if (data.users.length < 1){
+                  result.append('<p>No Result</p>')
+                }else{
+                  for (var i = 0; i < data.users.length; i++) {
+                    user = data.users[i]
+                    result.append(userHTML(user.id, user.username))
+                  }
+                }
+                
+              } else {
+                alert(data.message);
               }
-            } else {
-              alert(data.message);
+            },
+            error: function (xhr, status) {
+              alert(xhr + " : " + status);
             }
-          },
-          error: function (xhr, status) {
-            alert(xhr + " : " + status);
-          }
-        });
+          });
+        }        
       }
 
       // 검색 결과 아이템에 대한 html을 불러오는 함수
@@ -349,14 +409,19 @@
               for (var i = 0; i < data.friends.length; i++) {
                 friend = data.friends[i]
                 id_formatted = "'" + friend.id + "'"
-                friendsList.append('<div class="item p-2" ><div class="position-relative" style="height:auto;"><i class="bi bi-person-circle" style="font-size: 50px;" onclick="move(' + id_formatted + ' )"></i><a class="del-button position-absolute top-0 start-100 translate-middle" onclick="deleteFriend(' + id_formatted + ')"><span class="badge rounded-pill bg-danger">X</span></a><p class="m-0">' + friend.username + '</p></div></div>')
+                src = "/static/img/user.png"
+                if(friend.img){
+                  src = friend.img
+                }
+                img = '<img src="'+ src +'" style="width: 65px; height:65px; object-fit: cover; border-radius: 70%; border:4px solid white;" onclick="move('+ id_formatted + ')"></img>'
+                
+                friendsList.append('<div class="item p-1" ><div class="position-relative" style="height:auto;">' + img + '<a class="del-button position-absolute top-0 start-100 translate-middle" onclick="deleteFriend(' + id_formatted + ')"><span class="badge rounded-pill bg-danger mt-4">X</span></a><p class="m-0">' + friend.username + '</p></div></div>')
               }
             } else {
               alert(data.message);
             }
           },
           error: function (xhr, status) {
-            console.log(xhr);
             alert(xhr + " : " + status);
           }
         });
@@ -452,7 +517,7 @@
       $(document).ready(function(){
         //초기에 친구 목록을 부르고 설정 모달의 초기값을 지정함
         loadFriend();
-        changePassword();
+        changeImage();
       });
 
       function scrollBack(){

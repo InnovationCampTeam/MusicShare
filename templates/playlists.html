@@ -81,27 +81,28 @@
 {% endblock %}
 {% block content %}
   <main>
-    <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=200" style="width: 100vw; position: absolute; z-index: -99"/>
-    <section class="py-5 text-center container">
-      <div class="row py-lg-5">
+    <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=180" style="width: 100vw; position: absolute; z-index: -99"/>
+    <section class="py-5 text-center container" style="position:relative">
+      {% if session["img"]%}
+      <img class="mb-4" src="{{session['img']}}" style="width:35vh; height:35vh; object-fit: cover; border-radius: 70%; border:15px solid white;"></img> 
+      {%else%}
+      <img class="mb-4" src="/static/img/user.png" style="width:35vh; height:35vh; object-fit: cover; border-radius: 70%; border:15px solid white;"></img> 
+      {% endif %}     
+      <div class="row py-lg-5"  style="position:absolute;width:100%; top:70%;">
         <div class="col mx-auto">
           <h1 class="fw-light" style="width:100%;">
             <font style="vertical-align: inherit">
-              <font style="vertical-align: inherit; font-size: 5vh; font-weight: 700">{{session['username']}}님 반갑습니다.</font>
+              <font style="vertical-align: inherit; font-size: 5vh; font-weight: 700;">Welcome! {{session['username']}}</font>
             </font>
           </h1>
           <p class="lead text-body-secondary">
             <font style="vertical-align: inherit">
-              {% if session['userText'] %}
-              <font style="vertical-align: inherit; font-size: 2vh; font-weight: 700">{{session['userText']}}</font>
-              {% else %}
-              <font style="vertical-align: inherit; font-size: 2vh; font-weight: 700">지금 인사말을 추가해보세요!</font>
-              {% endif %}             
+              <font style="vertical-align: inherit; font-size: 2vh; font-weight: 700;">Hope you have another enjoyable day with us today!</font>       
             </font>
           </p>
           <p>
             <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              Playlist 추가
+              New Playlist
             </button>
           </p>
         </div>
@@ -112,28 +113,22 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">My Playlist</h1>
+            <h1 class="modal-title fs-5" id="exampleModalLabel">New Playlist</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="modal-body">
               <form action="{{ url_for('playlist_create') }}" method="GET">
                 <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label">Playlist 이름</label>
+                  <label for="exampleInputEmail1" class="form-label">Playlist Title</label>
                   <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="playlist_name"/>
-                  <div id="emailHelp" class="form-text">
-                    Playlist의 제목을 적어주세요!
-                  </div>
                 </div>
                 <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label">커버 이미지</label>
+                  <label for="exampleInputPassword1" class="form-label">Cover Image URL</label>
                   <input type="text" class="form-control" id="exampleInputPassword1" name="img_url"/>
-                  <div id="emailHelp" class="form-text">
-                    Playlist의 배경 이미지 주소를 적어주세요!
-                  </div>
                 </div>
-                <button type="submit" class="btn btn-outline-primary">
-                  만들기
+                <button type="submit" class="btn btn-danger" style="width:100%">
+                  Create
                 </button>
               </form>
             </div>
@@ -142,37 +137,33 @@
       </div>
     </div>
 
-    <div class="album py-5 bg-body-tertiary">
+    <div class="album py-5 bg-body-tertiary" style="margin-top:80px">
       <div class="container">
         {% if playlists %}
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          <div class="row row-cols-4 g-0">
             {% for playlist in playlists %}
-              <div class="col">
+              <div class="col p-2" id="playlist_item">
                 <div class="card shadow-sm">
-                  <a href="{{ url_for('musics', plid=playlist.plid) }}">
-                    <img class="bd-placeholder-img card-img-top" width="100%" height="225" object-fit="cover" src="{{playlist.img}}" alt="..." style="object-fit: cover;"/>
-                    <div class="card-body">
-                      <p class="card-text">
-                        <font style="vertical-align: inherit">
-                          <font style="vertical-align: inherit">{{ playlist.name }}</font>
-                        </font>
-                      </p>
+                  <a href="{{ url_for('musics', plid=playlist.plid) }}" style="position:relative" >
+                    {% if playlist.img %}
+                    <img class="bd-placeholder-img card-img-top" width="100%" object-fit="cover" src="{{playlist.img}}" alt="..." style="object-fit: cover; height:200px"/>
+                    {%else%}
+                    <img class="bd-placeholder-img card-img-top" width="100%" object-fit="cover" src="/static/img/playlist.png" alt="..." style="object-fit: cover; height:200px"/>
+                    {% endif %} 
+                    
+                    <div class="card-body p-1" style="position:absolute; background:linear-gradient(to bottom, transparent, black); width:100%; top:70%;">
                       <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                          <a  class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal"  onclick="SetParamModal('{{playlist.plid}}','{{playlist.name}}','{{playlist.img}}')">
-                            <font style="vertical-align: inherit">
-                              <font style="vertical-align: inherit">수정</font>
-                            </font>
+                          <a class="btn btn-sm btn-secondary p-1" data-bs-toggle="modal" data-bs-target="#editModal"  onclick="SetParamModal('{{playlist.plid}}','{{playlist.name}}','{{playlist.img}}')">
+                            <font style="vertical-align: inherit; font-size: 1vh;">Update</font>
                           </a>
-                          <form action="{{ url_for('playlist_delete', plid=playlist.plid) }}" method="POST" style="display: inline">
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">
-                              <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">삭제</font>
-                              </font>
-                            </button>
-                          </form>
+                          <a class="btn btn-sm btn-secondary p-1" onclick="deletePlaylist('{{playlist.plid}}')">
+                            <font style="vertical-align: inherit; font-size: 1vh;">Delete</font>
+                          </a>
                         </div>
                       </div>
+                      <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color:white; font-size: 20px;font-weight:1000;">{{ playlist.name }}
+                      </p>
                     </div>
                   </a>
                 </div>
@@ -181,7 +172,7 @@
           </div>
         {% else %}
           <div class="col">
-            <p style="font-size: 4vh; font-weight: 700;" align='center'>지금 바로 Playlist를 추가해보세요!</p>
+            <p style="font-size: 4vh; font-weight: 700;" align='center'>Add a playlist right now!</p>
           </div>
         {% endif %}
       </div>
@@ -241,6 +232,14 @@
         alert(xhr + " : " + status);
       }
     });
+  }
+
+  function deletePlaylist(plid){
+    if(confirm("Playlist will be deleted. Are you Sure?")){
+      location.href = "/playlists/delete/" + plid;
+    }
+
+
   }
 </script>
 
