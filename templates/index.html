@@ -31,10 +31,13 @@
       <img src="https://ichef.bbci.co.uk/news/1024/cpsprodpb/14A2C/production/_111042548_gettyimages-1010220858.jpg" style="width:300px; height:200px; object-fit: contain;">
       -->
       <!-- 로고 : 메시지 -->
-      <p style="font-size: 35px;font-weight:1000; width:auto; color:white; text-align:center;">나만의 플레이리스트를<br>가까운 사람들과 공유해 보세요</p>
+      <p class="m-0" style="font-size: 35px;font-weight:1000; width:auto; color:white; text-align:center;">
+        Share Your Personal Playlist
+      </p>
+      <p style="font-size: 20px;font-weight:1000; width:auto; color:white; text-align:center;">with your close friends and family.</p>
 
       <!-- 아이디 비밀번호 입력 구간 -->
-      <div style="width:25vw;">
+      <div style="width:20vw;">
         <form method="POST" id="loginForm">
           <div class="mb-3">
             <input type="text" class="form-control" id="LoginID" aria-describedby="ud" name="id">
@@ -43,10 +46,9 @@
             <input type="password" class="form-control" id="LoginPassword" name="password">
           </div>
         </form>
-        <button class="btn btn-danger" onclick="login()" style="width: 100%;">Login</button>
-        <div class="row" style="width:auto; text-align: center;">
-          <p class="col m-0 p-1" style="font-size: 13px; font-weight:700; color:white; text-align:right;">아직 회원이 아니신가요?</p>
-          <a class="col m-0 p-1" type="button" data-bs-toggle="modal" data-bs-target="#Modal" style="color: blue; font-size: 13px; font-weight:700; color:blue; text-align:left;">회원가입하러가기</a>
+        <button class="btn btn-danger" onclick="login()" style="width: 100%;">LOGIN</button>
+        <div class="row" style="width:100%; text-align: center;">
+          <a class="col m-0 p-1" type="button" data-bs-toggle="modal" data-bs-target="#Modal" style="color: blue; font-size: 15px; font-weight:700; color:white; text-align:center; text-decoration-line: none;">Create an Account</a>
         </div>
       </div>
     </div>
@@ -57,7 +59,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">회원가입</h1>
+          <h1 class="modal-title fs-5" id="ModalLabel">Welcome!</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -65,15 +67,15 @@
             <div class="mb-3">
               <label for="SignupID" class="form-label">ID</label>
               <input type="text" class="form-control" id="SignupID" name="id">
-              <div class="form-text">최소 한개의 영문자와 숫자[8-14]</div>
+              <div class="form-text">At least one letter and number [8-14]</div>
             </div>
             <div class="mb-3">
               <label for="SignupPassword" class="form-label">Password</label>
               <input type="password" class="form-control" id="SignupPassword" name="password">
-              <div class="form-text">최소 한개의 영문자와 숫자, 특수 문자[10-20]</div>
+              <div class="form-text">At least one letter, number, and special character [10-20]</div>
             </div>
             <div class="mb-3">
-              <label for="SignupName" class="form-label">이름</label>
+              <label for="SignupName" class="form-label">Name</label>
               <input type="text" class="form-control" id="SignupName" name="name">
             </div>
           </form>
