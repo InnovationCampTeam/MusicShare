@@ -5,7 +5,7 @@
   <main>
     <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=180" style="width: 100vw; position: absolute; z-index: -99"/>
     <section class="py-5 text-center container" style="position:relative">
-      <button type="button" onclick="javascript:history.back()" class="btn" style="font-size: 18px; position:absolute; top:2%; left:1%"><i class="bi bi-backspace-fill"></i></button>
+      <button type="button"onClick="location.href='/playlists/'" class="btn" style="font-size: 18px; position:absolute; top:2%; left:1%"><i class="bi bi-backspace-fill"></i></button>
       {% if friend.img%}
         <img class="mb-4" src="{{friend.img}}" style="width:250px; height:250px; object-fit: cover; border-radius: 70%; border:15px solid white;"></img>
         {%else%}
