@@ -33,3 +33,8 @@
 [data-bs-theme="dark"] .theme-toggle .toggle-circle {
   transform: translateX(40px);
 }
+
+#playlist_item:hover{
+  transform: scale(1.1);
+  transition-duration: 0.5s; 
+}

@@ -1,72 +1,65 @@
 {% extends "layout.html" %}
-{% block style %}
-{% endblock %}
+{% block style %}{% endblock %}
 {% block content %}
-<!-- Content -->
-<main>
-  <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col mx-auto">
-        <h1 class="fw-light" style="width:100%;">
-          <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit; ">{{friend.username}}님의 플레이 리스트에 오신 것을 환영합니다.</font>
-          </font>
-        </h1>
-        <p class="lead text-body-secondary">
-          <font style="vertical-align: inherit;">
-            <font style="vertical-align: inherit;">어서 와서 구경하세요!.</font>
-          </font>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <div class="album py-5 bg-body-tertiary">
-    <div class="container">
-      {% if playlists %}
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for playlist in playlists %}
-        <div class="col">
-          <div class="card shadow-sm">
-            <a href="{{ url_for('friend_musics', plid=playlist.plid) }}">
-              <img
-                class="bd-placeholder-img card-img-top"
-                width="100%"
-                height="225"
-                object-fit="cover"
-                src="{{ playlist.img }}"
-                alt="..."                
-                style="object-fit: cover;"
-              />
-              <div class="card-body">
-                <p class="card-text">
-                  <font style="vertical-align: inherit">
-                    <font style="vertical-align: inherit"
-                      >{{ playlist.name }}</font
-                    >
-                  </font>
-                </p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                  </div>
-                  <small class="text-body-secondary">
-                  </small>
-                </div>
-              </div></a
-            >
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% else %}
-      <div class="col">
-        <p style="font-size: 4vh; font-weight: 700;"  align='center'>생성한 Playlist가 없습니다.</p>
-      </div>
+  <!-- Content -->
+  <main>
+    <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&section=header&height=180" style="width: 100vw; position: absolute; z-index: -99"/>
+    <section class="py-5 text-center container" style="position:relative">
+      <button type="button"onClick="location.href='/playlists/'" class="btn" style="font-size: 18px; position:absolute; top:2%; left:1%"><i class="bi bi-backspace-fill"></i></button>
+      {% if friend.img%}
+        <img class="mb-4" src="{{friend.img}}" style="width:250px; height:250px; object-fit: cover; border-radius: 70%; border:15px solid white;"></img>
+        {%else%}
+        <img class="mb-4" src="/static/img/user.png" style="width:250px; height:250px; object-fit: cover; border-radius: 70%; border:15px solid white;"></img>
       {% endif %}
+      <div class="row py-lg-5" style="position:absolute;width:100%; top:70%;">
+        
+        <div class="col mx-auto">
+          <h1 class="fw-light" style="width:100%;">
+            <font style="vertical-align: inherit">
+              <font style="vertical-align: inherit; font-size: 5vh; font-weight: 700;">{{friend.username}}'s Playlist</font>
+            </font>
+          </h1>
+          <p class="lead text-body-secondary">
+            <font style="vertical-align: inherit">
+              <font style="vertical-align: inherit; font-size: 2vh; font-weight: 700;">Hope you have another enjoyable day with us today!</font>
+            </font>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="album py-5 bg-body-tertiary" style="margin-top:80px">
+      <div class="container">
+        {% if playlists %}
+          <div class="row row-cols-4 g-0">
+            {% for playlist in playlists %}
+              <div class="col p-2" id="playlist_item">
+                <div class="card shadow-sm">
+                  {% if playlist.img %}
+                  <img class="bd-placeholder-img card-img-top" width="100%" object-fit="cover" src="{{playlist.img}}" alt="..." style="object-fit: cover; height:200px"/>
+                  {%else%}
+                  <img class="bd-placeholder-img card-img-top" width="100%" object-fit="cover" src="/static/img/playlist.png" alt="..." style="object-fit: scale-down; height:200px"/>
+                  {% endif %} 
+                  <div class="card-body p-1" style="position:absolute; background:linear-gradient(to bottom, transparent, black); width:100%; bottom:0%;">
+                    <a href="{{ url_for('friend_musics', plid=playlist.plid) }}" style="text-decoration-line: none;">
+                      <p class="card-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color:white; font-size: 20px;font-weight:1000;">{{ playlist.name }}
+                      </p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="col">
+            <p style="font-size: 4vh; font-weight: 700;" align='center'>Add a playlist right now!</p>
+          </div>
+        {% endif %}
+      </div>
     </div>
-  </div>
-</main>
-{% endblock %}   
+
+  </main>
+{% endblock %}
 {% block script %}
-<!-- 자바스크립트 -->
-{% endblock %}   
+  <!-- 자바스크립트 -->
+{% endblock %}

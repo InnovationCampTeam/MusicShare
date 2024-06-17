@@ -25,6 +25,7 @@ class User(db.Model):
     id = db.Column(db.String(30), primary_key=True)
     password = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
+    img = db.Column(db.Text, nullable=True)
 
     # for build json format
     def obj_to_dict(self):  
@@ -32,6 +33,7 @@ class User(db.Model):
             "id": self.id,
             "password": self.password,
             "username": self.username,
+            "img": self.img,
         }
 
 class Playlist(db.Model):  
@@ -39,7 +41,7 @@ class Playlist(db.Model):
     plid = db.Column(db.Integer, primary_key=True,autoincrement=True)
     id = db.Column(db.String(30),ForeignKey('User.id',ondelete='CASCADE'))
     name = db.Column(db.String(100), nullable=False)
-    img = db.Column(db.String(100), nullable=False)
+    img = db.Column(db.Text)
     user = db.relationship("User",backref=db.backref('Playlist', cascade='delete'))
 
 
@@ -49,7 +51,7 @@ class Music(db.Model):
     plid = db.Column(db.Integer,ForeignKey('Playlist.plid',ondelete='CASCADE'))
     title = db.Column(db.String(100), nullable=False)
     artist = db.Column(db.String(100), nullable=False)
-    url = db.Column(db.String(100), nullable=False)
+    url = db.Column(db.Text)
     playlist = db.relationship("Playlist",backref=db.backref('Music', cascade='delete'))
 
 class Share(db.Model):    
@@ -92,6 +94,7 @@ def login():
         # 세션에 값을 저장
         session['id'] = id
         session['username'] = user.username
+        session['img'] = user.img
         # 플레이리스트 페이지로 이동 명령 전달
         return jsonify(result = "success",redirect='/playlists')
     else :
@@ -140,6 +143,17 @@ def logout():
         session.pop('username', None)
         session.pop('id', None)
     return redirect(url_for('home'))
+
+# 이승현 - 사용자 이미지 변경 : 사용자 비밀번호 변경
+@app.route("/changeImage/",methods=['POST'])
+def changeImage():
+    # 입력 값을 전달
+    url = request.form.get("url")
+    user = db.session.query(User).filter_by(id=session['id']).first()
+    user.img = url
+    db.session.commit()
+    session['img'] = url
+    return jsonify(result = "success",redirect='/playlists/')
 
 # 이승현 - 비밀번호 변경 : 사용자 비밀번호 변경
 @app.route("/changePassword/",methods=['POST'])
@@ -295,13 +309,13 @@ def playlist_create():
     playlist_name_receive = request.args.get("playlist_name")
     img_receive = request.args.get("img_url")
   #  데이터 DB에 저장
-    my_playlist = Playlist(name=playlist_name_receive, img=img_receive, id =session['id'])
-    db.session.add(my_playlist)
+    playlist = Playlist(name=playlist_name_receive, img=img_receive, id =session['id'])
+    db.session.add(playlist)
     db.session.commit()
     return redirect(url_for('playlists'))
 
 # 류영찬 - Playlist 삭제하기
-@app.route('/playlists/delete/<int:plid>', methods=['POST'])
+@app.route('/playlists/delete/<int:plid>')
 def playlist_delete(plid):
     playlist = Playlist.query.get(plid)
     if playlist:
@@ -310,16 +324,17 @@ def playlist_delete(plid):
     return redirect(url_for('playlists'))
 
 # 류영찬 - Playlist 수정하기
-@app.route('/playlists/edit/<int:plid>', methods=['GET', 'POST'])
-def playlist_edit(plid):
-    playlist = Playlist.query.get(plid)
-    if request.method == 'POST':
-        playlist.name = request.form.get('playlist_name')
-        playlist.img = request.form.get('img_url')
-        db.session.commit()
-        return redirect(url_for('playlists'))
-    
-    return render_template('playlists_edit.html', playlist=playlist)
+@app.route('/playlists/edit', methods=['POST'])
+def playlist_edit():    
+    img_receive = request.form.get("img_url")    
+    plid = request.form.get("editplid")    
+    playlist_name_receive = request.form.get("playlist_name")    
+
+    playlist = db.session.query(Playlist).filter_by(plid=plid).first()
+    playlist.name = playlist_name_receive
+    playlist.img = img_receive
+    db.session.commit()    
+    return jsonify(result = "success") 
 
 # 권지민 - 음악 페이지 : 특정 플레이리스트에 포함된 음악 목록을 불러옴
 @app.route("/playlists/<plid>/")
@@ -328,11 +343,7 @@ def musics(plid):
     if "id" in session:
         playlist = Playlist.query.filter_by(plid=plid).first()
         musics = Music.query.filter_by(plid=plid).all()    
-<<<<<<< HEAD
-        create_url = url_for('musics_create', plid=plid)
-=======
         create_url = url_for('musics_create', plid=plid)  
->>>>>>> acc0ba3b4353418285de20967a83a81dfaa78178
         addURL = url_for('addFriend')
         searchURL = url_for('searchUser')
         loadURL = url_for('loadFriend')

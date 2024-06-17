@@ -39,7 +39,7 @@ for user_id in user_ids:
         playlist_name = f"Playlist_{random_string(6)}"
         img_name = f"img_{random_string(6)}.jpg"
         playlist_data.append((user_id, playlist_name))
-        output.append(f"INSERT OR IGNORE INTO Playlist (id, name, img) VALUES ('{user_id}', '{playlist_name}', '{img_name}');")
+        output.append(f"INSERT OR IGNORE INTO Playlist (id, name) VALUES ('{user_id}', '{playlist_name}');")
 
 # Music Data
 for user_id, playlist_name in playlist_data:
@@ -47,7 +47,7 @@ for user_id, playlist_name in playlist_data:
         song_title = f"Song_{random_string(6)}"
         artist_name = f"Artist_{random_string(6)}"
         song_url = f"url_{random_string(6)}.mp3"
-        output.append(f"INSERT OR IGNORE INTO Music (plid, title, artist, url) VALUES ((SELECT plid FROM Playlist WHERE id='{user_id}' AND name='{playlist_name}'), '{song_title}', '{artist_name}', '{song_url}');")
+        output.append(f"INSERT OR IGNORE INTO Music (plid, title, artist) VALUES ((SELECT plid FROM Playlist WHERE id='{user_id}' AND name='{playlist_name}'), '{song_title}', '{artist_name}');")
 
 # Share Data
 for user_id in user_ids:
