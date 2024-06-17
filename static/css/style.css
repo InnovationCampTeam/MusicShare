@@ -1,6 +1,25 @@
-body{
-   text-align: center;
+@font-face {
+  font-family: "Coves";
+  src: url('../fonts/CovesLight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: "Coves";
+  src: url('../fonts/CovesBold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+body{
+	font-family: 'Coves', sans-serif !important; 
+  text-align: center;
+}
+
+
 .wrap-vertical::-webkit-scrollbar{
    display: none; 
 }
@@ -30,7 +49,34 @@ body{
   display: none;
 }
 
-<style>
+
+footer {
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: left;
+  font-family: Arial, sans-serif;
+}
+.footer-content {
+  margin: auto;
+}
+.footer-content p {
+  margin: 5px 0;
+}
+.footer-content a {
+  color: #333;
+  text-decoration: none;
+}
+
+
+.social-media a {
+  margin: 0 5px;
+}
+.legal-notice {
+  text-align: center;
+  padding-top: 20px;
+}
+
+
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
@@ -114,3 +160,13 @@ body{
 }
 
 .item:hover .del-button {opacity:1; display: block; top:10px;}
+
+#playlist_item:hover .div{
+  transform: scale(1.05);
+  transition-duration: 0.5s; 
+}
+
+.blur {
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+}
