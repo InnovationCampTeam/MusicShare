@@ -43,7 +43,7 @@ This project is the result of a 3-day mini web project conducted during the Inno
 
 - **Brochure Submission**
   
-  [Music Share](http://dlrjfdlfrdj.pythonanywhere.com/playlists/)
+  [Music Share](http://dlrjfdlfrdj.pythonanywhere.com/)
 
 ## 🔲 Wireframe
 
